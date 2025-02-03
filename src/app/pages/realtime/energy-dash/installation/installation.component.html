@@ -1,0 +1,246 @@
+<ng-container [ngSwitch]="owner">
+    <div class="row" [id]="'daily-consuption-inst'+dataManagementService.selectedInstallation?.id"
+      *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[dataManagementService.selectedInstallation?.id]">
+      <div class="col-lg-12" *ngFor="let group of orderByName(dataManagementService.selectedInstallation?.groupses)">
+        <div *ngIf="group.type == 'General'">
+          <nb-card accent="primary" class="solar-card">
+            <nb-card-header class="blue-card">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  {{group.name | uppercase}}
+                </div>
+                <div class="text col-md-6 col-sm-12 text-sm-left text-md-right">
+                  <ng-container *ngSwitchCase="'AZIZA'">
+                  <a (click)="selectDashboard()"class="pointer">{{'Aziza' | uppercase}}</a>
+                  <i class="nb-arrow-thin-right"></i>
+                 </ng-container>
+                  <a (click)="selectZone(zone)"
+                    class="pointer">{{dataManagementService.selectedZone.name | uppercase}}</a>
+                  <i class="nb-arrow-thin-right"></i>
+                  {{dataManagementService.selectedInstallation.name | uppercase}}
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body style="overflow-x: hidden!important;">
+              <div class="row">
+                <div class="col-12 col-md-3 align-self-center">
+                  <div class="caption my-md-2 mb-2 text-center">
+                    <span class="">{{'DASH.energyLabel' | translate}}</span>
+                    <p class="caption" *ngIf="owner =='ANME'"> {{ 'DASH.dateEnergyLabel' | translate }}  {{ today | date:'mediumDate':'UTC+1'}}</p>
+                  </div>
+                  <div class="h4 text-center mb-0" style="font-size: larger !important">
+                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.eAct
+                    | number:'1.0-0'}}
+                    {{getUnit()}}
+                    <ng-container [ngSwitch]="owner">
+                      <span *ngSwitchCase="'AZIZA'" class="text-muted ml-2" style="font-weight:500; font-size: medium !important;" nbTooltip="{{'TOOLTIP.powerInst' | translate }}">
+                        ({{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.iPower | number:'1.0-2'}} Kw)
+                      </span> 
+                    </ng-container>
+                  </div>
+                  <div *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.provider" 
+                  class="h4 text-center" style="font-size: larger !important">
+                  <fa-icon [icon]="faIcon.faPlug"></fa-icon>  
+                    <span class="text-muted" style="font-weight:500 !important; font-size: medium !important;" nbTooltip="{{'TOOLTIP.phv' | translate }}" >
+                      {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.provider?.eActPerCat[4]?.eAct | number:'1.0-0'}}
+                    </span>
+                    <fa-icon [icon]="faIcon.faSun" class="ml-2"></fa-icon>
+                    <span class="text-muted" style="font-weight:500 !important; font-size: medium !important;" nbTooltip="{{'TOOLTIP.general' | translate }}"> 
+                      {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.provider?.eActPerCat[6]?.eAct | number:'1.0-0'}}
+                    </span>
+                  </div>
+                  <div class="shortcut-graph" [ngSwitch]="owner">
+                    <div *ngSwitchDefault
+                        class="d-inline-flex flex-column-reverse border-left border-bottom pl-2 pb-2">
+                        <div class="mt-2">
+                            <fa-icon [icon]="faIcon.faChartBar" class="pointer" title="History"
+                                style="font-size: 150%; font-weight: 100;"
+                                (click)="selectedCompartor(getGeneralGroup())"></fa-icon>
+                        </div>
+                    </div>
+                    <div *ngSwitchCase="AZIZA"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-8 offset-md-1">
+                  <div class="summary-container">
+                    <div *ngFor="let phase of sortPhaseByVolatgeName(group.phases)" class="col">
+                      <div class="mb-2">
+                        {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.phasesRtDto[phase.id]?.cmoy
+                        | number:'1.0-0' }}
+                        A
+                      </div>
+                      <div class="mb-2">
+                        {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.phasesRtDto[phase.id]?.vmoy
+                        | number:'1.0-0' }}
+                        V
+                      </div>
+                      <div class="caption h6">{{phase.voltage.name}}</div>
+                    </div>
+                  </div>
+                  <ng-container [ngSwitch]="owner">
+                  <div *ngSwitchCase="'AZIZA'" id="shortcut-container" class="d-flex flex-row flex-wrap mt-4">
+                    <h7 class="mr-2 mb-2"> <span (click)="selectedCompartorByType('ALL_TMP')" class="pointer badge badge-shortcut p-2 mr-2 "> <fa-icon [icon]="faIcon.faHistory"></fa-icon>  Temperatures</span></h7>
+                    <h7 class="mr-2 mb-2"> <span (click)="selectedCompartorByType('AMBIENT_CLIM')" class="pointer badge badge-shortcut  p-2 mr-2 "><fa-icon [icon]="faIcon.faHistory"></fa-icon> Ambiantes et climatisations</span></h7>
+                    <h7 class="mr-2 mb-2"> <span (click)="selectedCompartorByType('TMP_POWER_MOY')" class="pointer badge badge-shortcut p-2 mr-2 "><fa-icon [icon]="faIcon.faHistory"></fa-icon> Temperatures et puissances</span></h7>
+                    <h7 class="mr-2 mb-2"> <span (click)="selectedCompartorByType('ALL_POWER_MOY')" class="pointer badge badge-shortcut  p-2 mr-2"><fa-icon [icon]="faIcon.faHistory"></fa-icon> Puissances</span></h7> 
+                   </div>
+                   </ng-container>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+    <div class="row px-3 pr-md-0 pl-md-3 " [id]="'rt-per-group-'+dataManagementService.selectedInstallation?.id"
+      *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[dataManagementService.selectedInstallation?.id]">
+      <ng-container *ngFor="let group of orderByName(getGroupses(dataManagementService.selectedInstallation.groupses)) ">
+        <div [id]="'rt-group'+group.id" class="col-12 col-md-4 mb-4  px-0 pr-md-3"
+          *ngIf="group.type != 'General' && dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]">
+          <nb-card size="tiny" class="solar-card h-100 "
+            [ngStyle]="{ 'border-top-color':getGroupCat(group)?.color, 'border-top-width': '3px'}">
+            <nb-card-header class="d-flex flex-row justify-content-between align-items-center group-header"
+              [ngStyle]="{ 'color':getGroupCat(group)?.color}">
+              <div size="tiny" class="pr-3">
+                {{group.name }}
+              </div>
+              <div class="d-flex flex-row">
+                <div class="ml-2 text-medium">
+                  <fa-icon [icon]="faIcon.faHistory" class="pointer" title="energy" (click)="selectedEnergy(group)"></fa-icon>
+                </div>
+                <div class="ml-2 text-medium">
+                  <fa-icon [icon]="faIcon.faInfoCircle" class="pointer" title="details" (click)="selectedDetails(group)"></fa-icon>
+                </div>
+                <div class="ml-2 text-medium">
+                  <fa-icon [icon]="faIcon.faNotEqual" class="pointer" title="compartor" (click)="selectedCompartor(group)"></fa-icon>
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body class="d-flex flex-column flex-wrap justify-content-between pt-2">
+              <div class="row">
+                <div class="lg-6 percentage  m-auto">
+                  <percentage [group]="group"></percentage>
+                </div>
+                <div class="info align-self-center m-auto pt-0">
+                  <div class="h4 value">
+                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.eAct
+                    | number:'1.0-0'}}
+                    {{getUnit()}}</div>
+                  <div class="details subtitle-2"><span> out of </span>
+                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.eAct
+                    | round}}
+                    {{getUnit()}}</div>
+                </div>
+              </div>
+              <div class="details" [ngSwitch]="owner">
+                <div class="parameter" *ngSwitchCase="'AZIZA'" >
+                  <span class="parameter-name">KW</span>
+                  <span class="parameter-value">
+                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.iPower | number:'1.0-2'}}
+                  </span>
+                </div>
+                <div class="parameter" *ngSwitchDefault>
+                  <span class="parameter-name">KW/h</span>
+                  <span class="parameter-value">
+                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.eAct|
+                    number:'1.0-0' }}
+                  </span>
+                </div>
+                <div class="parameter" *ngFor="let phase of orderByName(group.phases) ">
+                  <span class="parameter-name">A L{{(phase.idPhaseDevice%3)+1}}
+                  </span>
+                  <span class="parameter-value">
+                    {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.phasesRtDto[phase.id]?.cmoy
+                    | number:'1.0-0' }}
+                  </span>
+                </div>
+
+                <div class="parameter">
+                  <span class="parameter-name">{{'DASH.neutral' | translate}}</span>
+                  <span class="parameter-value">0%</span>
+                </div>
+
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </ng-container>
+    </div>
+    <div class="row">
+      <ng-container *ngFor="let device of orderByName(dataManagementService.selectedInstallation?.devices)">
+        <div *ngIf="device.sondes.length > 0" class=" col-md-6 mb-4 ">
+          <nb-card accent="primary" class="h-100" style=" box-shadow: 0 0px 16px 0 rgb(0 0 0 / 20%), 0 0px 0px 0 rgb(0 0 0 / 19%) !important;">
+              <nb-card-header class="dSonde-header">
+                <nb-icon status="primary" icon="thermometer" class="mr-2"></nb-icon>{{device.name | uppercase}} </nb-card-header>
+              <nb-card-body class="d-flex flex-md-row flex-column flex-wrap sonde-body" style="background-color: transparent !important; ">
+                    <nb-card [ngClass]="{'red-card':getDateDiffColor(dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.sondesRtDto[getRTSondeId(sonde.id)]?.lastTime)=='red'}"
+                     class="mr-md-4" style="height: min-content;" *ngFor="let sonde of orderByName(device.sondes)">
+                      <nb-card-header class="sonde-header  px-2 p-3 d-flex flex-row justify-content-between align-items-center">
+                        <div>{{sonde.name}}</div>
+                        <div class="battery-lbl"
+                        [ngClass]="{
+                          'green': getBatteryDiffColor(dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.sondesRtDto[getRTSondeId(sonde.id)]) == 'green',
+                          'red': getBatteryDiffColor(dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.sondesRtDto[getRTSondeId(sonde.id)]) == 'red'
+                        }">
+                          <fa-icon [icon]="faIcon.faBatteryFull" class="mr-1"></fa-icon>{{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.sondesRtDto[getRTSondeId(sonde.id)]?.lastBattery}}%</div></nb-card-header>
+                          <nb-card-body class="px-1 sonde-body">
+                        <nb-tabset fullWidth>
+                          <nb-tab tabTitle="Temperature" class="p-1">
+                            <div class="slider-value-container">
+                              <div class="value pt-3 pb-1">
+                                {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.sondesRtDto[getRTSondeId(sonde.id)]?.lastTemperatue / 16 | number:'2.1-2' }}
+                              </div>
+                              <div class="desc text-center">
+                                Celsius
+                              </div>
+                            </div>
+                          </nb-tab>
+                          <nb-tab tabTitle="Humidity" class="p-1">
+                            <div class="slider-value-container ">
+                              <div class="value pt-3 pb-1">
+                                {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.sondesRtDto[getRTSondeId(sonde.id)]?.lastHumidity/2}}
+                              </div>
+                              <div class="desc text-center" style="font-size: large;">
+                                %
+                              </div>
+                            </div>
+                          </nb-tab>
+                        </nb-tabset>
+                      </nb-card-body>
+                      <nb-card-footer class="text-center p-3" 
+                      [ngClass]="{
+                        'red':getDateDiffColor(dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.sondesRtDto[getRTSondeId(sonde.id)]?.lastTime)=='red',
+                        'orange':getDateDiffColor(dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.sondesRtDto[getRTSondeId(sonde.id)]?.lastTime)=='orange'
+                      }" > 
+                        <fa-icon [icon]="faIcon.faClock" class="mr-2"></fa-icon>
+                        {{getLastTimeSonde(sonde.id) | date: 'dd-MM-yyyy HH:mm:ss'}}
+                      </nb-card-footer>
+                    </nb-card>
+              </nb-card-body>
+            </nb-card>
+        </div>
+      </ng-container>
+    </div>
+    <div class="row mb-md-4">
+      <div class="  col-md-6 mb-4 "
+        *ngFor="let deviceFroid of orderByName(dataManagementService.selectedInstallation?.deviceFroids)">
+        <nb-card accent="info" class="solar-card h-100" 
+        style=" box-shadow: 0 0px 16px 0 rgb(0 0 0 / 20%), 0 0px 0px 0 rgb(0 0 0 / 19%) !important;">
+          <nb-card-header class="dFroid-header">
+            <fa-icon [icon]="faIcon.faSnowflake" class="mr-2" style="color:var(--text-info-color)"></fa-icon>{{deviceFroid.label | uppercase}} </nb-card-header>
+          <nb-card-body>
+              <ul class="list-group px-0">
+                <li class="list-group-item d-flex flex-wrap justify-content-between align-items-center" *ngFor="let point of alarmPointsFilter(deviceFroid.points)">
+                  <span><fa-icon [icon]="faIcon.faInfoCircle" class="mr-3 pointer" title="details"  (click)="selectedPointDetails(point)"></fa-icon>
+                    {{point.label}} ({{point.unit}})</span>
+                  <span class="badge badge-primary w-25 text-center ml-auto px-3" style="background-color: #51a3cc;"> Val: {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.pointRtDto[point.id+point.deviceId*1000]?.value | number }} 
+                  </span>
+                  <span  *ngIf="point.setpointId" class="badge badge-primary w-25 text-center px-3" style="background-color: #51a3cc;"> SP: {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.pointRtDto[point.id+point.deviceId*1000]?.setpointValue | number }}
+                  </span>
+                </li>
+              </ul>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+</ng-container>

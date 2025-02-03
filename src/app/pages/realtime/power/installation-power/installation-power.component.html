@@ -1,0 +1,123 @@
+<div [ngSwitch]="owner">
+  <div class="row" *ngSwitchCase="'AZIZA'">
+    <div class="row"
+      *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]">
+      <div class="col-lg-12" *ngFor="let group of dataManagementService.selectedInstallation.groupses">
+        <div *ngIf="group.name == 'General'">
+          <nb-card size="tiny" class="solar-card">
+            <nb-card-header>
+              <div class="row">
+                <div class="col-md-8">
+                  {{group.name}}
+                </div>
+                <div class="title col-md-4">
+                  <a (click)="selectZone(zone)">Aziza</a>
+                  <!--Zone-->
+                  <i class="nb-arrow-thin-right"></i>
+                  <a (click)="selectInstallation(installation)">{{dataManagementService.selectedZone.name}}</a>
+                  <i class="nb-arrow-thin-right"></i>
+                  {{dataManagementService.selectedInstallation.name}}
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="value1">
+                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.iPower | number:'1.0-0'}}
+                    kW</div>
+                </div>
+                <div class="col-md-9">
+                  <div class="summary-container">
+                    <ng-container *ngFor="let phase of group.phases">
+                      <div class="summory">
+                        <div class="value">
+                          {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id].phasesRtDto[phase.id]?.cmoy | number:'1.0-0' }}
+                          A
+                        </div>
+                        <div class="value">
+                          {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].installationsRtDto[dataManagementService.selectedInstallation.id].groupsRtDto[group.id].phasesRtDto[phase.id]?.vmoy | number:'1.0-0' }}
+                          V
+                        </div>
+                        <div class="title">{{phase.voltage.name}}</div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngSwitchCase="'AZIZA'">
+    <div class="row"
+      *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]">
+      <ng-container *ngFor="let group of dataManagementService.selectedInstallation.groupses">
+        <div class="col-lg-4 col-md-4" *ngIf="group.name != 'General'">
+          <nb-card size="tiny" class="solar-card">
+            <nb-card-header   [ngStyle]="{'color': getGroupCat(group)?.color}">
+              <div class="row">
+                <div class="col-md-8" size="tiny">
+                  {{group.name }}
+                </div>
+                <div class="col-md-1">
+                  <i class="fas fa-history" (click)="selectedEnergy(group)"></i>
+                </div>
+                <div class="col-md-1">
+                  <i class="fas fa-info-circle" (click)="selectedDetails()"></i>
+                </div>
+                <div class="col-md-1">
+                  <i class="fas fa-not-equal" (click)="selectedCompartor()"></i>
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="lg-6 percentage">
+                  <percentage [idDivPrefix]="divPrefixZn" [idDiv]="group.id"
+                    [color]=getGroupCat(group)?.color
+                    [value]="dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.iPower "
+                    [total]="dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.iPower"
+                    [name]="group.name"></percentage>
+                </div>
+                <div class="info">
+                  <div class="h4 value">
+                    {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.iPower | number:'1.0-0'}}
+                    kWh</div>
+                  <div class="details subtitle-2"><span>out of</span>
+                    {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.iPower | round}}
+                    kWh</div>
+                </div>
+              </div>
+              <div class="details">
+                <div class="parameter">
+                  <span class="parameter-name">KW/h</span>
+                  <span class="parameter-value">
+                    {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.iPower| number:'1.0-0' }}
+                  </span>
+                </div>
+                <div class="parameter" *ngFor="let phase of group.phases">
+                  <span class="parameter-name">A L{{phase.idPhaseDevice+1}}
+
+                  </span>
+                  <span class="parameter-value">
+                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]?.groupsRtDto[group.id]?.phasesRtDto[phase.id]?.cmoy | number:'1.0-0' }}
+                  </span>
+                </div>
+
+                <div class="parameter">
+                  <span class="parameter-name">Neutre</span>
+                  <span class="parameter-value">0%</span>
+                </div>
+
+              </div>
+
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

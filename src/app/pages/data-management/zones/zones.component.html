@@ -1,0 +1,15 @@
+<nb-card class="" accent="primary">
+    <nb-card-header>
+        <nb-icon status="primary" icon="settings-outline"></nb-icon>
+        <span class="ml-2" *ngIf="owner != 'CDC'"> Gestion de sites</span>
+
+        <span class="ml-2" *ngIf="owner == 'CDC'"> Gestion de usines</span>
+    </nb-card-header>
+    <nb-card-body>
+        <ng2-smart-table [settings]="settings" [source]="source" 
+        (deleteConfirm)="onDeleteConfirm($event)"
+      (editConfirm)="onEditConfirm($event)"
+       (createConfirm)="onCreateConfirm($event)">
+        </ng2-smart-table>
+    </nb-card-body>
+</nb-card>

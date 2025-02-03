@@ -1,0 +1,92 @@
+@import '../../@theme/styles/themes';
+
+
+@include nb-install-component() {
+    //overflow: auto;
+    nb-list-item {
+       &:hover {
+        background-color: var(--layout-scrollbar-background-color);
+        border-bottom: solid 2px grey;
+        color: black;
+      }
+    }
+  }
+  .pointer{
+    cursor: pointer !important;
+  }
+  
+  // alert filter 
+  %col-md-3 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    @media (min-width: 768px){
+      flex: 0 0 25%;
+      max-width: 25%;
+    }
+  }
+
+  %col-md-4 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    @media (min-width: 768px){
+      flex: 0 0 33.33333333%;
+      max-width: 33.33333333%;
+    }
+  }
+  
+  #zone-box{
+    @extend %col-md-3 !optional;
+    display:none;
+  }
+  #site-box{
+    @extend %col-md-3 !optional;
+    display:none;
+  }
+  #depot-box{
+    @extend %col-md-3 !optional;
+    display:none;
+  }
+  #chambre-box{
+    @extend %col-md-3 !optional;
+    display:none;
+  }
+  #installation-box{
+    @extend %col-md-3 !optional;
+  }
+  #measure-type-box{
+    @extend %col-md-3 !optional;
+  }
+  #measure-box{
+    @extend %col-md-3 !optional;
+  }
+  #measure-box-sonde{
+    display: none !important;
+  }
+  #measure-box-measures{
+    display: flex !important;
+  }
+   #measure-box-input{
+    display: none !important;
+   }
+  #alert-type-box{
+    @extend %col-md-3 !optional;
+  }
+
+  .list-card {
+    height: 55vh;
+    margin: 0 auto 2rem;
+  }
+
+  ::ng-deep nb-select.disabled button {
+    cursor: not-allowed !important;
+  }
+
+  .threat {
+    background-color: #f41b1b1a !important;
+  }

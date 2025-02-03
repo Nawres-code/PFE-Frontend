@@ -1,0 +1,25 @@
+<nb-card>
+    <nb-card-header>
+      <span>{{ 'DASH.'+type | translate}}</span>
+      <nb-select [selected]="period" (selectedChange)="getUserActivity($event.val); period = $event">
+        <nb-option *ngFor="let p of periods" [value]="p">{{ 'DASH.'+ p.label | translate }}</nb-option>
+      </nb-select>
+    </nb-card-header>
+  
+    <nb-list class="user-activity-list">
+      <nb-list-item *ngFor="let item of orderByName(ioList)">
+  
+        <div class="visited-date">
+          {{ item.name }}
+          <span class="badge badge-primary ml-2">{{item.category == 'General'? item.category : ''}}</span>
+        </div>
+  
+        <div class="visited-pages-count text-right">
+          <div class="caption">{{'DASH.meter'| translate }} ({{item.unit}})</div>
+          <div class="value"> {{getRtValue(item.id)}} </div>
+        </div>
+  
+      </nb-list-item>
+    </nb-list>
+  
+  </nb-card>

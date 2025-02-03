@@ -1,0 +1,78 @@
+<div [ngSwitch]="owner">
+  <div class="row" *ngSwitchCase="'AZIZA'">
+    <div class="col-lg-12 col-md-12" *ngFor="let category of dataManagementService.tenantData.categories">
+      <div *ngIf="category.name == 'General'">
+        <nb-card size="tiny" class="solar-card">
+          <nb-card-header >
+            <div class="row">
+              <div class="col-md-8">
+                {{category.name}}
+              </div>
+              <div class="title col-md-4">
+                Aziza
+              </div>
+            </div>
+          </nb-card-header> 
+          <nb-card-body>
+              <div class="value1">{{dataManagementService.dataRtDto?.iPower | number:'2.1-2'}}
+                kW </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngSwitchCase="'AZIZA'">
+    <div class="col-lg-3 col-md-3" *ngFor="let category of dataManagementService.tenantData?.categories">
+      <div *ngIf="category.name != 'General' && dataManagementService.dataRtDto.eActPerCat[category.id]">
+        <nb-card size="tiny" class="solar-card">
+          <nb-card-header   [ngStyle]="{'color': category.color}">{{ category.name }}</nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="lg-6 percentage">
+                <percentage [idDivPrefix]="divPrefixZn" [idDiv]="category.id"
+                  [color]=category.color
+                  [value]="dataManagementService.dataRtDto.eActPerCat[category.id]['iPower']"
+                  [total]="dataManagementService.dataRtDto.iPower" [name]="zone.name"></percentage>
+              </div>
+              <div class="info">
+                <div class="h4 value">{{dataManagementService.dataRtDto.eActPerCat[category.id]['iPower'] | number:'2.1-2'}}kWh
+                </div>
+                <div class="details subtitle-2"><span>out of</span>{{dataManagementService.dataRtDto.iPower | round}}
+                  kWh
+                </div>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6 col-md-6" *ngFor="let zone of dataManagementService.tenantData.zones">
+    <nb-card size="tiny" class="solar-card">
+      <nb-card-header (click)="selectZone(zone)">
+        <fa-icon [icon]="faIcon.faChartLine"></fa-icon> {{ zone.name }}
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row">
+          <div class="lg-6 percentage">
+            
+          </div>
+          <div class="lg-6 info">
+            <div class="h4 value" *ngIf="zone">
+              {{dataManagementService.dataRtDto.zonesRtDto[zone.idZone]?.iPower | number:'2.1-2'}} kW</div>
+            <div class="h4 value" *ngIf="!zone">---- kW</div>
+            <div class="details subtitle-2"><span>out of</span>
+              {{dataManagementService.dataRtDto?.iPower | round }}
+              kW
+            </div>
+          </div>
+        </div>
+        <div class="date">
+          {{dataManagementService.dataRtDto.zonesRtDto[zone.idZone]?.time | date: 'dd-MM-yyyy HH:mm:ss'}}
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

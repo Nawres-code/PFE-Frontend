@@ -1,0 +1,116 @@
+  .group-header {
+    color: var(--text-primary-color) !important;
+  }
+
+  .input-icon {
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 0.75rem;
+  }
+
+  nb-card.input-card {
+    background-color: #f8f9fa;
+
+    & nb-card-header {
+      border-bottom: none !important;
+      & img {
+        display: none !important;
+      }
+      & .caption{
+        color: var(--card-text-color) !important;
+        font-weight: 600 !important;
+      }
+    }
+
+    & nb-card-footer {
+      border-top: none !important;
+    }
+  }
+
+  nb-card.accent-danger {
+    background-color: var(--color-danger-transparent-focus);
+    color: var(--text-danger-color);
+
+    & nb-card-header {
+      color: var(--text-danger-color);
+
+      & img {
+        width: 30% !important;
+        display: inline-flex !important;
+      }
+      & .caption{
+        color: var(--text-danger-color) !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+
+  nb-card.accent-warning {
+    background-color: var(--color-warning-transparent-focus);
+    color: var(--text-warning-color);
+
+    & nb-card-header {
+      color: var(--text-warning-color);
+
+      & img {
+        display: none !important;
+      }
+      & .caption{
+        color: var(--text-warning-color) !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+
+  nb-card.accent-success {
+    background-color: var(--color-success-transparent-focus);
+    color: #1d5436 !important;
+
+    & nb-card-header {
+      color: #1d5436 !important;
+
+      & img {
+        display: none !important;
+      }
+      & .caption{
+        color: #1d5436 !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+
+  .shortcut {
+    font-size: x-large;
+    cursor: pointer !important;
+  }
+
+  .middle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .div-container {
+    position: relative;
+    &:hover nb-card {
+      opacity: 0.3;
+    }
+    &:hover .middle {
+      opacity: 1;
+    }
+  }
+
+  .text {
+    background-color: var(--text-primary-color) !important;
+    color: white;
+    //font-size: 16px;
+    border-top-left-radius: 25%;
+    border-bottom-right-radius: 25%;
+  }

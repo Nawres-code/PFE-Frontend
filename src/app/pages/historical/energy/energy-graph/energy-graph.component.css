@@ -1,0 +1,18 @@
+#heading{
+  background-color: cornflowerblue;
+}
+
+.wrapper {
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  height: calc(100vh - 20px);
+}
+
+.inner {
+  padding: 12px;
+}
+
+::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+  stroke: cornflowerblue !important;
+}

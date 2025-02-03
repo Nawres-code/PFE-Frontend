@@ -1,0 +1,81 @@
+<nb-card class="mb-3" accent="primary">
+  <nb-card-header>
+      <nb-icon status="primary" icon="bar-chart"></nb-icon>
+      <span class="ml-2">{{'HISTORY.comparator' | translate}}</span>
+  </nb-card-header>
+<nb-card-body class="px-0 py-2">
+<div class="d-flex flex-md-row flex-column justify-content-between align-self-center">
+  <div class=" w-20 p-2 d-flex flex-row justify-content-between">
+      <div class="col px-0 mr-2">
+        <input nbInput  name="startDate" [formControl]="formControl"  placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="from" class="col-12 col-md-2"  (ngModelChange)="onDateRangeChange($event, 'start')" >
+        <nb-date-timepicker #from singleColumn [step]="5" style="display:none;"></nb-date-timepicker>
+      </div>
+      <div class="col px-0">
+        <input nbInput placeholder="{{'HISTORY.endDate' | translate}}" [nbDatepicker]="to" class="col-12 col-md-2" name="endDate" [formControl]="formControl1" (ngModelChange)="onDateRangeChange($event, 'end')" >
+        <nb-date-timepicker #to singleColumn [step]="5" style="display:none;" ></nb-date-timepicker>
+      </div>
+  </div>
+<div class="w-100 px-2 d-flex flex-md-row flex-column">
+    <div class="ml-md-2 w-100 row align-self-center">
+      <button nbButton status="primary" size="small" class="col-12 col-md-4 mr-2 my-1" 
+      (click)="openDialogue()" [disabled]="disableFormBtn"
+      [nbSpinner]="disableFormBtn" nbSpinnerStatus="warning">
+        <nb-icon icon="plus-square-outline"></nb-icon> {{'HISTORY.addMeasure' | translate}}</button>
+      <ng-container *ngIf="graphService.graphEntries.length!=0">
+        <button  *ngIf="!this.graphService.listShow" nbButton status="primary" size="small"
+         class="col-12 col-md-2 mr-2 my-1" (click)="toggleList()" nbSpinnerStatus="warning">
+          <nb-icon icon="arrow-ios-downward-outline"></nb-icon>{{'HISTORY.expandList' | translate}}</button>
+          <button  *ngIf="this.graphService.listShow" nbButton status="primary" size="small"
+         class="col-12 col-md-2 mr-2 my-1" (click)="toggleList()" nbSpinnerStatus="warning">
+          <nb-icon icon="arrow-ios-upward-outline"></nb-icon> {{'HISTORY.hideList' | translate}}</button>
+      </ng-container>
+      <button nbButton status="primary" size="small"
+          class="col-12 col-md-2 mr-2 my-1" (click)="onReset()" [disabled]="graphService.graphEntries.length==0">
+           <nb-icon icon="trash-2-outline"></nb-icon> {{'HISTORY.deleteAll' | translate}}</button>
+    </div>
+    <div *ngIf="graphService.graphEntries.length==0" class="align-self-center mt-2"> <small></small> </div>
+  </div>
+</div>
+</nb-card-body>
+<nb-card-body class="p-0 px-2" style="display:inline-flex;">
+  <ng-container  *ngIf="this.graphService.listShow">
+    <ng-container *ngIf="owner != 'METOS'">
+      <div class="d-flex flex-grow-1 flex-md-row flex-column p-0 ul">
+        <ng-container *ngFor="let entry of graphService.graphEntries; let index_entry = index; ">
+          <ng-container *ngFor="let group of entry.groupses; let index_group = index; ">
+            <div class="align-self-center overflow-wrap li mb-2" [nbSpinner]="entry.status" nbSpinnerSize="small"
+              nbSpinnerStatus="primary">
+              <div class="flex-column  overflow-wrap p-2 mr-2 w-100">
+                <span class="badge badge-danger badge-pill" (click)="onRemove(index_entry, index_sensor)">
+                  <fa-icon [icon]="faIcon.faTimes"></fa-icon>   
+                </span>  
+                <p class="m-0" style="font-size: 0.7rem !important;font-weight: 600;">{{entry.installationName}}</p>
+                <p class="m-0" style="font-size: 0.7rem !important;font-weight: 600;" *ngIf="entry.vars != 'point'">{{group.name | uppercase }} - {{graphService.getGraphName(entry.vars)}}</p>
+                <p class="m-0" style="font-size: 0.7rem !important;font-weight: 600;"  *ngIf="entry.vars == 'point'">{{group.label}} - {{graphService.getGraphName(entry.vars)}}</p>
+              </div>
+            </div>
+        </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="owner == 'METOS'">
+      <div class="d-flex flex-grow-1 flex-md-row flex-column p-0 ul">
+        <ng-container *ngFor="let entry of graphService.graphEntries; let index_entry = index; ">
+          <ng-container *ngFor="let sensorId of entry.sensorIds; let index_sensor = index; ">
+            <div class="align-self-center overflow-wrap li mb-2" [nbSpinner]="entry.status" nbSpinnerSize="small"
+              nbSpinnerStatus="primary">
+              <div class="flex-column  overflow-wrap p-2 mr-2 w-100">
+                <span class="badge badge-danger badge-pill" (click)="onRemove(index_entry, index_sensor)">
+                  <fa-icon [icon]="faIcon.faTimes"></fa-icon>
+                </span>  
+                <p class="m-0" style="font-size: 0.7rem !important;font-weight: 600;">{{graphService.getStationName(entry.stationId, null, entry.installationName)}}</p>
+                <p class="m-0"style="font-size: 0.7rem !important;font-weight: 600;">{{graphService.getSensorName(sensorId)}}</p>
+              </div>
+            </div>
+        </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+  </nb-card-body>
+</nb-card>

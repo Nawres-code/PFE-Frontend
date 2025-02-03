@@ -1,0 +1,62 @@
+@import '../../../../@theme/styles/themes';
+
+button{
+  cursor: pointer !important;
+}
+span.badge {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: none;
+  cursor: pointer !important;
+  font-size: x-small !important;
+}
+.overflow-wrap{
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ul{
+  // overflow-x: scroll;
+  display: inline-flexbox !important;
+}
+@include nb-install-component() {
+  //overflow: auto;
+
+  .li {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-height: 5.2rem !important;
+    min-width: 150px !important;
+    font-size: small;
+    text-align: center;
+    position: relative;
+    color:#4e5256;
+    border-bottom:
+      nb-theme(list-item-border-width)
+      nb-theme(card-header-border-type);
+      & div {
+       background-color: #edf1f7;
+      }
+    &:hover {
+      & div {
+        background-color: #f84d691f;
+        color: #a02a2a;
+        transition: visibility 0s, opacity 0.5s linear;
+      }
+      & span.badge {
+        display: block;
+      }
+    }
+  }
+
+  .li div {
+    font-size: small !important;
+    border-radius: 20px;
+  }  
+
+  .large-text{
+    font-size: large !important;
+  }
+}

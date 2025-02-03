@@ -1,0 +1,37 @@
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+
+.right-align {
+  text-align: right;
+}
+
+.reset {
+  color: #949292;
+  &:hover{
+    color: #b52121 ;
+  }
+}
+
+.label-div {
+  min-width: 70px !important;
+  max-width: 70px !important;
+}
+
+.pointer { 
+  cursor: pointer !important;
+}
+
+::ng-deep nb-checkbox label .text:not(:empty){
+  padding-left: 0.5rem !important;
+}
+
+#cron-container {
+  background-color: #e9ecef;
+  border-radius: 2%;
+}
+
+@include media-breakpoint-down(sm) {
+  .reset-group {
+    margin-left: 0.5rem !important;
+  }
+}

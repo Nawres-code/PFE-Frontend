@@ -1,0 +1,16 @@
+
+<span *ngIf="!showInputs" class="show-hide-toggle"  (click)="toggleStatistics()">
+  <fa-icon [icon]="faIcon.faAngleLeft" title="Afficher les options"></fa-icon>
+
+</span>
+<span *ngIf="showInputs" class="show-hide-toggle"  (click)="toggleStatistics()">
+<fa-icon [icon]="faIcon.faAngleRight" title="Cacher les options"></fa-icon>
+
+</span>
+<div class="slide-out-container pl-0"
+     [class.expanded]="showInputs"
+     [class.collapsed]="!showInputs">
+  <div class="content-wrapper p-2">
+    <ng-content></ng-content>
+  </div>
+</div>

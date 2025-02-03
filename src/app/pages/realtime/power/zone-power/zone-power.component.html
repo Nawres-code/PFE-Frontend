@@ -1,0 +1,110 @@
+<div [ngSwitch]="owner">
+  <div class="row" *ngSwitchCase="'AZIZA'">
+    <ng-container *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]">
+      <div class="col-lg-12" *ngFor="let category of dataManagementService.tenantData.categories">
+        <div *ngIf="category.name == 'General'">
+          <nb-card size="tiny" class="solar-card">
+            <nb-card-header>
+              <div class="row">
+                <div class="col-md-8">
+                  {{dataManagementService.selectedZone.name}}
+                </div>
+                <div class="title col-md-4">
+                  <a (click)="selectZone(zone)">Zone</a>
+                  <i class="nb-arrow-thin-right"></i>
+                  {{dataManagementService.selectedZone.name}}
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body>
+              <div class="info">
+                <div class="value1">
+                  {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].iPower | number:'2.1-2'}}
+                  kW</div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="row" *ngSwitchCase="'AZIZA'">
+    <div class="row" *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]">
+      <div class="col-lg-3 col-md-3" *ngFor="let category of dataManagementService.tenantData.categories">
+        <div *ngIf="category.name != 'General' && dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.eActPerCat[category.id]">
+          <nb-card size="tiny" class="solar-card">
+            <nb-card-header   [ngStyle]="{'color': category.color}">
+              <div class="row">
+                <div class="col-md-8" size="tiny">
+                  {{category.name }}
+                </div>
+                <div class="col-md-1">
+                  <i class="fas fa-history" (click)="selectedEnergy()"></i>
+                </div>
+                <div class="col-md-1">
+                  <i class="fas fa-info-circle" (click)="selectedDetails()"></i>
+                </div>
+                <div class="col-md-1">
+                  <i class="fas fa-not-equal" (click)="selectedCompartor()"></i>
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="lg-6 percentage">
+                  <percentage [idDivPrefix]="divPrefixZn" [idDiv]="category.id"
+                    [color]="category.color"
+                    [value]="dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.eActPerCat[category.id]['iPower'] "
+                    [total]="dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.iPower"
+                    [name]="category.name"></percentage>
+                </div>
+                <div class="info">
+                  <div class="h4 value">
+                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].eActPerCat[category.id]['iPower'] | number:'2.1-2'}}
+                    kWh</div>
+                  <div class="details subtitle-2"><span>out of</span>
+                    {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.iPower | round}}
+                    kWh
+                  </div>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6 col-md-6" *ngFor="let installation of dataManagementService.selectedZone.installations">
+    <nb-card size="tiny" class="solar-card">
+      <nb-card-header (click)="selectInstallation(installation)">{{ installation.name }}</nb-card-header>
+      <nb-card-body>
+        <div class="row" *ngIf="installation.type != 'depot'">
+          <div class="lg-6 percentage">
+            <percentage [idDiv]="installation.id"
+              [value]="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].installationsRtDto[installation.id]?.iPower"
+              [total]="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].iPower"
+              [name]="installation.name"></percentage>
+          </div>
+          <div class="info">
+            <div class="h4 value">
+              {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].installationsRtDto[installation.id]?.iPower | number:'2.1-2'}}
+              kW</div>
+            <div class="details subtitle-2"><span>out of</span>
+              {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].iPower | round}}
+              kW
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="installation.type == 'depot'">
+          <gps-graph [idDiv]="installation.id" [sondes]="installation.sondes" [sondes]="selectedSondes" [vars]="vars"
+            [startDate]="startDate" [endDate]="endDate"></gps-graph>
+        </div>
+        <div class="date">
+          {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.time | date: 'dd-MM-yyyy HH:mm:ss'}}
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

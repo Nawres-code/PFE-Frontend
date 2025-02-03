@@ -1,0 +1,89 @@
+<div class="limiter">
+   <div class="container-login100">
+      <div class="wrap-login100 p-l-50 p-r-50 p-t-50 p-b-50">
+         <form class="login100-form validate-form" [ngSwitch]="owner">
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'INPUT'">
+               <img alt="hss" src="https://traci.tn/images/logoInput.png" style="width: 150px;">
+            </span>
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'IOT'">
+               <img alt="iot" src="https://fleet.tn/images/logoEnergy.png" style="width: 150px;">
+            </span>
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'AZIZA'">
+               <img alt="aziza" src="https://traci.tn/images/aziza.png" style="width: 260px;">
+            </span>
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'FLEETDEPOT'">
+               <img alt="fleetdepot" src="https://fleet.tn/images/logotds.png" style="width: 150px;">
+            </span>
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'MEKATECH'">
+               <img alt="mekatech" src="https://traci.tn/images/logomekatech.png" style="width: 150px;">
+            </span>
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'TRICITY'">TRICITY</span>
+             <span class="login100-form-title p-b-40" *ngSwitchCase="'CDC'">
+               <!-- <img alt="mekatech" src="https://traci.tn/images/leoni.png" style="width: 150px;"> -->
+            <h2 class="font-weight-bold text-uppercase" style="color: #391f5b!important;">Accentify</h2>
+            </span> 
+            <span class="login100-form-title" *ngSwitchCase="'ANME'">
+               <img class="pb-4 text-left mb-3" src="https://traci.tn/images/ESMES.png" style="width: 15rem;" />
+            </span>
+            <span class="login100-form-title pb-4 text-left " *ngSwitchCase="'KASSAB'">
+               <img src="assets/images/green-kassab.png" style="width: 22rem;" />
+            </span>
+            <span class="login100-form-title pb-0 " *ngSwitchCase="'KASSAB2'">
+               <img src="https://traci.tn/images/logoInput.png" style="width: 10rem;" />
+            </span>
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'VILAVI'"><img alt="vilavi"
+                  src="https://traci.tn/images/vilavi.png" style="width: 260px;"></span>
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'DEPOT'">
+               <img alt="depot" src="https://fleet.tn/images/logoEnergy.png" style="width: 150px;">
+            </span>
+            <span class="login100-form-title p-b-40" *ngSwitchCase="'METOS'">GLOBETECH</span>
+
+            <div class="wrap-input100 validate-input m-b-16">
+               <input class="input100" type="text" name="name" id="name" [(ngModel)]="credentials.login"
+                  placeholder="{{'LOGIN.username' | translate }}" #username="ngModel">
+               <span class="focus-input100"></span>
+               <span class="symbol-input100">
+                  <span class="lnr lnr-envelope"></span>
+               </span>
+            </div>
+
+            <div class="wrap-input100 validate-input m-b-16" data-validate="Password is required">
+               <input class="input100" type="password" name="pass" id="pass" [(ngModel)]="credentials.password"
+                  placeholder="{{'LOGIN.pwd' | translate }}" #password="ngModel" autocomplete>
+               <span class="focus-input100"></span>
+               <span class="symbol-input100">
+                  <span class="lnr lnr-lock"></span>
+               </span>
+            </div>
+
+            <!-- <div class="contact100-form-checkbox m-l-4">
+               <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+               <label class="label-checkbox100" for="ckb1">
+                  Remember me
+               </label>
+            </div> -->
+
+            <div class="container-login100-form-btn p-t-25">
+               <button class="login100-form-btn" (click)="login()"><span>{{'LOGIN.submit' | translate }}</span></button>
+            </div>
+            <div class="wrap-input100 m-b-16 m-t-16">
+               <nb-select size="tiny" status="primary" [(selected)]="selectedLanguage" placeholder="lang"
+                  (selectedChange)="translateLanguageTo($event)" class=" float-right pointer">
+                  <nb-option *ngFor="let language of translate.getLangs()" [value]="language">{{ language | uppercase}}
+                  </nb-option>
+               </nb-select>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+
+<!--===============================================================================================-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="js/main.js"></script>

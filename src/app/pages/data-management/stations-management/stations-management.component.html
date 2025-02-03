@@ -1,0 +1,12 @@
+<nb-card accent="primary">
+  <nb-card-header>
+    <nb-icon status="primary" icon="settings-outline"></nb-icon>
+     {{ 'STATION.stationTitle' | translate }}
+  </nb-card-header>
+
+  <nb-card-body>
+     <ng2-smart-table  *ngIf="settings!= null" [settings]="settings" [source]="source" (editConfirm)=onEditConfirm($event)>
+    </ng2-smart-table> 
+  </nb-card-body>
+</nb-card>
+

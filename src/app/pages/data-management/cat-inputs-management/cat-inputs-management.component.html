@@ -1,0 +1,13 @@
+<nb-card accent="primary" >
+  <nb-card-header>
+    <nb-icon status="primary" icon="settings-outline"></nb-icon>
+    <span class="ml-2"> Gestion des Départs</span>
+    
+  </nb-card-header>
+
+  <nb-card-body>
+     <ng2-smart-table  [settings]="settings" [source]="source"  (editConfirm)=onEditConfirm($event) >
+       <!-- (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)=onEditConfirm($event)> -->
+    </ng2-smart-table> 
+  </nb-card-body>
+</nb-card>

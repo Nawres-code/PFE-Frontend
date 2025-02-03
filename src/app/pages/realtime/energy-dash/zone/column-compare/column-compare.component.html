@@ -1,0 +1,5 @@
+<!-- <div  id="container" name="container" class="pl-2" style=" height: 150px; min-width: 100%;"></div> -->
+<highcharts-chart *ngIf="chartOptions" [Highcharts]="Highcharts" [options]="chartOptions" 
+style="min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; display: block;"
+[nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+</highcharts-chart> 

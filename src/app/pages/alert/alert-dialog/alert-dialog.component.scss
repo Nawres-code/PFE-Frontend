@@ -1,0 +1,40 @@
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+.form-inline [fullWidth] {
+  flex: 1;
+}
+
+.form-inline > * {
+  margin: 0 1.5rem 1.5rem 0;
+}
+
+nb-card.inline-form-card nb-card-body {
+  padding-bottom: 0;
+}
+
+nb-card-body{
+    overflow-y: scroll;
+}
+
+.right-align {
+  text-align: right;
+}
+
+@include media-breakpoint-up(md) {
+  .main-card { 
+    width: 60vw !important; 
+    max-height: 95vh !important;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .main-card { 
+    width: 90vw !important; 
+    max-height: 80vh !important;
+    & card-body {
+      padding-left: 0.25rem !important;
+    }
+  }
+
+}
+

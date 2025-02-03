@@ -1,0 +1,76 @@
+<div class="row">
+
+    <div class="col-md-12">
+        <nb-card>
+            <nb-card-header>Plannification</nb-card-header>
+            <nb-card-body>
+                <form>
+                    <div class="form-group row">
+                        <label for="inputDate" class="label col-sm-3 col-form-label">Date</label>
+                        <div class="col-sm-9">
+                            <input type="date" nbInput fullWidth id="inputDate" placeholder="Date" [ngModel]="myDate">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEquipe" class="label col-sm-3 col-form-label">Liste des Equipes</label>
+                        <div class="col-sm-9">
+                            <nb-select selected="1">
+                                <nb-option value="1">Equipe1</nb-option>
+                                <nb-option value="2"> Equipe2</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 label">Nombre d’effectif</label>
+                        <div class="col-sm-9">
+                            <input type="number" nbInput fullWidth placeholder="Nombre d’effectif">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputFamille" class="label col-sm-3 col-form-label">Liste des Familles</label>
+                        <div class="col-sm-9">
+                            <nb-select selected="1">
+                                <nb-option value="1">Famille 1 </nb-option>
+                                <nb-option value="2"> Famille 2</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputVariante" class="label col-sm-3 col-form-label">Liste des Variantes</label>
+                        <div class="col-sm-9">
+                            <nb-select selected="1">
+                                <nb-option value="1">Variante 1 </nb-option>
+                                <nb-option value="2"> Variante 2</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputVariante" class="label col-sm-3 col-form-label">Variante</label>
+                        <div class="col-sm-9">
+                            <input type="text" nbInput fullWidth placeholder="Quantité objectif">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputVariante" class="label col-sm-3 col-form-label">Numéro de LAD</label>
+                        <div class="col-sm-9">
+                            <input type="number" nbInput fullWidth placeholder="Numéro de LAD">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="offset-sm-9 col-sm-3">
+                            <button type="submit" nbButton status="primary">Energister</button>
+                        </div>
+                    </div>
+                </form>
+            </nb-card-body>
+        </nb-card>
+
+    </div>
+</div>

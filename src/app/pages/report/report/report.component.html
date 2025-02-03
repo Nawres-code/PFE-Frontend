@@ -1,0 +1,197 @@
+<ng-container [ngSwitch]="owner">
+    <ng-container *ngSwitchDefault>
+      <nb-card accent="primary" class="solar-card  inline-form-card">
+        <nb-card-header >
+          <nb-icon status="primary" icon="file-text-outline"></nb-icon>
+          <span class="ml-2">{{'REPORT.annualTitle' | translate }}</span>
+        </nb-card-header>
+        <nb-card-body >
+          <form class="form-inline">
+              <input nbInput placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="frompicker" 
+              [(ngModel)]="dateInterval.startDate" class="col-12 col-md-4"  name="startDate">
+              <nb-datepicker #frompicker style="display:none;"></nb-datepicker>
+
+              <input nbInput placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="topicker" 
+              [(ngModel)]="dateInterval.endDate" class="col-12 col-md-4" name="endDate" >
+              <nb-datepicker #topicker style="display:none;"></nb-datepicker>
+                <button type="submit" nbButton status="primary" size="medium" class="ml-md-3 col-12 col-md-3"
+                 (click)="onDownaldingAnnual()"
+                [nbSpinner]="download" nbSpinnerStatus="warning" >
+                <nb-icon icon="save"></nb-icon>{{'REPORT.download' | translate }}</button> 
+          </form>
+        </nb-card-body>
+      </nb-card>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ANME'">
+      <nb-card *ngIf="!isIssat()" accent="primary" class="solar-card  inline-form-card">
+        <nb-card-header >
+          <nb-icon status="primary" icon="file-text-outline"></nb-icon>
+          <span class="ml-2">{{'REPORT.annualTitle' | translate }}</span>
+        </nb-card-header>
+        <nb-card-body >
+          <form class="form-inline">
+              <input nbInput placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="frompicker" 
+              [(ngModel)]="dateInterval.startDate" class="col-12 col-md-4"  name="startDate">
+              <nb-datepicker #frompicker style="display:none;"></nb-datepicker>
+
+              <input nbInput placeholder="{{'HISTORY.endDate' | translate}}" [nbDatepicker]="topicker" 
+              [(ngModel)]="dateInterval.endDate" class="col-12 col-md-4" name="endDate" >
+              <nb-datepicker #topicker style="display:none;"></nb-datepicker>
+                <button type="submit" nbButton status="primary" size="medium" class="ml-md-3 col-12 col-md-3"
+                 (click)="onDownaldingAnnual()"
+                [nbSpinner]="download" nbSpinnerStatus="warning" >
+                <nb-icon icon="save"></nb-icon>{{'REPORT.download' | translate }}</button> 
+          </form>
+        </nb-card-body>
+      </nb-card>
+      <nb-card *ngIf="isIssat()" accent="primary" class="solar-card  inline-form-card">
+        <nb-card-header >
+          <nb-icon status="primary" icon="file-text-outline"></nb-icon>
+          <span class="ml-2">{{'REPORT.title' | translate }}</span>
+        </nb-card-header>
+        <nb-card-body >
+          <form class="form-inline">
+
+            <nb-select fullWidth placeholder="{{'REPORT.reportType' | translate }}" [(selected)]="report.reportDto.type"
+              (selectedChange)="updateTypes($event)" class="col-12 col-md-2 px-0">
+              <nb-option *ngFor="let type of issatTypes" [value]="type[1]">{{ 'REPORT.'+type[0] | translate}} </nb-option>
+            </nb-select>
+
+            <nb-select fullWidth *ngIf="report.reportDto.type == 'ISSAT_GROUP'"  placeholder="Compteur" 
+            [(selected)]="selectedGroupses" >
+            <nb-option-group *ngFor="let inst of orderByName(dataManagementService.selectedZone?.installations)" 
+            [title]="inst.name">
+             <nb-option *ngFor="let group of orderByName(inst?.groupses)" [value]="group">{{group.name}}</nb-option>
+             </nb-option-group>
+            </nb-select>
+
+            <input nbInput placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="frompicker" 
+              [(ngModel)]="dateInterval.startDate" class="col-12 col-md-4"  name="startDate">
+
+            <nb-datepicker #frompicker style="display:none;"></nb-datepicker>
+
+            <input nbInput placeholder="{{'HISTORY.endDate' | translate}}" [nbDatepicker]="topicker" 
+              [(ngModel)]="dateInterval.endDate" class="col-12 col-md-4" name="endDate" >
+
+            <nb-datepicker #topicker style="display:none;"></nb-datepicker>
+
+            <button type="submit" nbButton status="primary" size="medium" class="ml-md-3 col-12 col-md-3"
+                 (click)="onIssatReport()" [nbSpinner]="download" nbSpinnerStatus="warning" >
+                <nb-icon icon="save"></nb-icon>{{'REPORT.download' | translate }}
+            </button> 
+          </form>
+        </nb-card-body>
+      </nb-card>
+    </ng-container>
+    <ng-container *ngSwitchCase="'AZIZA'">
+        <nb-card accent="primary" class="solar-card  inline-form-card">
+          <nb-card-header >
+            <nb-icon status="primary" icon="file-text-outline"></nb-icon>
+            <span class="ml-2">{{'REPORT.reportLbl' | translate }}</span>
+          </nb-card-header>
+          <nb-card-body>
+            <form class="form-inline">
+              <nb-select fullWidth placeholder="{{'HISTORY.reportType' | translate}}" [(selected)]="report.reportDto.type"
+              (selectedChange)="updateTypes($event)" class="col-12 col-md-2 px-0">
+              <nb-option *ngFor="let type of types" [value]="type[1]">{{ 'Type '+type[0] }}</nb-option>
+          </nb-select>
+
+          <nb-select fullWidth *ngIf="report.reportDto.type != 'BYZONE'"  placeholder="Installation" 
+          [(selected)]="selectedInstallation" (selectedChange)="chooseInstallation($event)"
+           class="col-12 col-md-3 px-0">
+           <nb-option *ngFor="let installation of orderByName(installations) " [value]="installation">{{installation.name | uppercase}}</nb-option>
+          </nb-select>
+
+          <nb-select fullWidth *ngIf="report.reportDto.type == 'BYZONE'"  placeholder="Zone" 
+          [(selected)]="selectedZone" (selectedChange)="chooseZone($event)"
+           class="col-12 col-md-3 px-0">
+           <nb-option *ngFor="let zone of orderByName(zones)" [value]="zone">{{zone.name | uppercase}}</nb-option>
+          </nb-select>
+
+              <input fullWidth nbInput placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="frompicker" 
+              [(ngModel)]="dateInterval.startDate" class="col-12 col-md-3"  name="startDate">
+              <nb-datepicker #frompicker style="display:none;"></nb-datepicker>
+
+              <input fullWidth *ngIf="report.reportDto.type == 'BYZONE'" nbInput placeholder="{{'HISTORY.endDate' | translate}}" [nbDatepicker]="topicker" 
+              [(ngModel)]="dateInterval.endDate" class="col-12 col-md-3" name="endDate" >
+              <nb-datepicker #topicker style="display:none;"></nb-datepicker>
+        
+              <button fullWidth type="submit" nbButton status="primary" size="medium" class="ml-md-3 col-12 col-md-3"
+                 (click)="onDownoaldingReport()"
+                [nbSpinner]="download" nbSpinnerStatus="warning">
+                <nb-icon icon="save"></nb-icon>{{'REPORT.download' | translate }}</button> 
+          </form>
+          </nb-card-body>
+        </nb-card>
+    </ng-container>
+    <ng-container *ngSwitchCase="'VILAVI'">
+      <nb-card accent="primary" class="solar-card  inline-form-card">
+        <nb-card-header >
+          <nb-icon status="primary" icon="file-text-outline"></nb-icon>
+          <span class="ml-2">{{'REPORT.hourlyTitle' | translate }} </span>
+        </nb-card-header>
+        <nb-card-body >
+          <form class="form-inline">
+              <input nbInput placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="frompicker" 
+              [(ngModel)]="dateInterval.startDate" class="col-12 col-md-4"  name="startDate">
+              <nb-datepicker #frompicker style="display:none;"></nb-datepicker>
+              <input nbInput placeholder="{{'HISTORY.endDate' | translate}}" [nbDatepicker]="topicker" 
+              [(ngModel)]="dateInterval.endDate" class="col-12 col-md-4" name="endDate" >
+              <nb-datepicker #topicker style="display:none;"></nb-datepicker>
+                <button type="submit" nbButton status="primary" size="medium" 
+                class="ml-md-3 col-12 col-md-3" (click)="onDownoaldingReportVilaviHours()"
+                [nbSpinner]="download" nbSpinnerStatus="warning">
+                <nb-icon icon="save"></nb-icon>
+                {{'REPORT.download' | translate }}
+              </button> 
+          </form>
+        </nb-card-body>
+      </nb-card>
+
+      <nb-card accent="primary" class="solar-card  inline-form-card">
+        <nb-card-header >
+          <nb-icon status="primary" icon="file-text-outline"></nb-icon>
+          <span class="ml-2">{{'REPORT.dailyTitle' | translate }}</span>
+        </nb-card-header>
+        <nb-card-body >
+          <form class="form-inline">
+              <input nbInput placeholder="{{'HISTORY.startDate' | translate }}" [nbDatepicker]="frompicker" 
+              [(ngModel)]="dateInterval.startDate" class="col-12 col-md-4"  name="startDate">
+              <nb-datepicker #frompicker style="display:none;"></nb-datepicker>
+              <input nbInput placeholder="{{'HISTORY.endDate' | translate }}" [nbDatepicker]="topicker" 
+              [(ngModel)]="dateInterval.endDate" class="col-12 col-md-4" name="endDate" >
+              <nb-datepicker #topicker style="display:none;"></nb-datepicker>
+                <button type="submit" nbButton status="primary" size="medium" 
+                class="ml-md-3 col-12 col-md-3" (click)="onDownoaldingReportVilavi()"
+                [nbSpinner]="download" nbSpinnerStatus="warning">
+                <nb-icon icon="save"></nb-icon>
+                {{'REPORT.download' | translate }}
+              </button> 
+          </form>
+        </nb-card-body>
+      </nb-card>
+
+      <nb-card accent="primary" class="solar-card  inline-form-card">
+        <nb-card-header >
+          <nb-icon status="primary" icon="file-text-outline"></nb-icon>
+          <span class="ml-2">{{'REPORT.annualTitle' | translate }}</span>
+        </nb-card-header>
+        <nb-card-body >
+          <form class="form-inline">
+              <input nbInput placeholder="{{'HISTORY.startDate' | translate }}" [nbDatepicker]="frompicker" 
+              [(ngModel)]="dateInterval.startDate" class="col-12 col-md-4"  name="startDate">
+              <nb-datepicker #frompicker style="display:none;"></nb-datepicker>
+              <input nbInput placeholder="{{'HISTORY.endDate' | translate }}" [nbDatepicker]="topicker" 
+              [(ngModel)]="dateInterval.endDate" class="col-12 col-md-4" name="endDate" >
+              <nb-datepicker #topicker style="display:none;"></nb-datepicker>
+                <button type="submit" nbButton status="primary" size="medium" 
+                class="ml-md-3 col-12 col-md-3" (click)="onDownaldingAnnualVilavi()"
+                [nbSpinner]="download" nbSpinnerStatus="warning">
+                <nb-icon icon="save"></nb-icon>
+                {{'REPORT.download' | translate }}
+              </button> 
+          </form>
+        </nb-card-body>
+      </nb-card>
+    </ng-container>
+</ng-container>

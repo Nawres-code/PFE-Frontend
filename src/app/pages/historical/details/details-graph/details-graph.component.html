@@ -1,0 +1,4 @@
+<highcharts-chart *ngIf="chartOptions?.series?.length>0" [Highcharts]="Highcharts" [options]="chartOptions" 
+ style="min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; display: block;"
+ [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large" [callbackFunction]="chartCallback"  #detailsChart>
+ </highcharts-chart> 

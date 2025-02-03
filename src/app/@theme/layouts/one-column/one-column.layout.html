@@ -1,0 +1,21 @@
+  <div  class="py-1 w-100" *ngIf="owner=='ANME' || owner=='KASSAB'" id="barre">
+    {{ 'EU_SUPPORT' | translate}}
+    
+  </div>
+    <nb-layout windowMode>
+      <nb-layout-header [ngClass]="{'mt-4':(owner=='ANME')|| owner=='KASSAB'}" fixed>
+        <ngx-header></ngx-header>
+      </nb-layout-header>
+
+      <nb-sidebar class="menu-sidebar" tag="menu-sidebar" id="header-sidebar" responsive>
+        <ng-content select="nb-menu"></ng-content>
+      </nb-sidebar>
+
+      <nb-layout-column [ngClass]="{'top-padding':owner=='ANME' || owner=='KASSAB'}">
+        <ng-content select="router-outlet"></ng-content>
+      </nb-layout-column>
+
+      <nb-layout-footer fixed class="mt-3">
+        <ngx-footer></ngx-footer>
+      </nb-layout-footer>
+    </nb-layout>

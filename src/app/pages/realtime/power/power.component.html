@@ -1,0 +1,12 @@
+<nb-card accent="primary">
+  <nb-card-header>
+    <nb-icon status="primary" icon="loader-outline"></nb-icon>
+    <span class="ml-2">
+      {{ 'Puissance temps réel' | uppercase }}  (kW)
+    </span>
+  </nb-card-header>
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>

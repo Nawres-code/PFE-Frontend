@@ -1,0 +1,10 @@
+<nb-card status="primary" size="tiny">
+  <nb-card-header>
+    GESTION DES SOUS COMPTES
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source" (editConfirm)=onEditConfirm($event)>
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>

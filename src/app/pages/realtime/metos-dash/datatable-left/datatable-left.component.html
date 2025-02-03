@@ -1,0 +1,109 @@
+<nb-card  accent="primary" class="mb-md-0">  
+  <nb-tabset fullWidth>
+    <nb-tab tabTitle="Station" >
+      <div class="col-sm-12 pt-3" >
+        <div class="input-group input-group-sm">
+            <input type="text" name="table_search" class="form-control pull-right" placeholder="{{'DASH.searchStation' | translate}}"
+                [(ngModel)]="stationSearch.name" autofocus>
+        </div>
+    </div>
+      <ng-container *ngFor="let installation of dataManagementService.selectedZone?.installations ">
+        <div class="contact" *ngFor="let c of installation.stations  | filterBy:stationSearch ">
+          <nb-user class="item" [id]="'station-'+c.id"
+            
+           [name]="c.name? c.name.toUpperCase(): c.id.toUpperCase()" size="tiny"
+           [ngClass]="{'selected': (dataManagementService.selectedStation?.id == c.id)}"></nb-user>
+           <fa-icon [icon]="faIcon.faPlayCircle" class="i-contact"  [ngClass]="{'user-selected': dataManagementService.selectedStation?.id == c.id}" (click)="selectStation(installation,c)"></fa-icon>
+        </div>
+      </ng-container>
+    </nb-tab>
+
+
+    <nb-tab *ngIf="dataManagementService.selectedStation" tabTitle="{{'DASH.details' | translate}}" >
+      <div class=" d-flex justify-content-between align-items-center p-2 mt-2 bg-pink rounded-top">
+            <nb-user [id]="'details-station-'+dataManagementService.selectedStation?.id"
+            class="selected"
+             [name]="(dataManagementService.selectedStation?.name)? dataManagementService.selectedStation?.name.toUpperCase():dataManagementService.selectedStation?.id" size="large">
+            </nb-user>
+         <div class="d-flex flex-row">
+          <span class="mt-2 ml-2"> 
+            <nb-action class="pointer color-ltgrey" nbTooltip="{{'DASH.searchMenu' | translate}}" (click)="toggleSearh()">
+              <fa-icon [icon]="faIcon.faSearch"></fa-icon> </nb-action>
+            </span>  
+            <span class="mt-2 ml-2"> 
+              <nb-action class="pointer color-ltgrey" *ngIf="expended"  nbTooltip="{{'DASH.hideAll' | translate}}" (click)="toggle()">
+                <fa-icon [icon]="faIcon.faArrowCircleUp"></fa-icon>
+              </nb-action>
+              <nb-action class="pointer color-ltgrey" *ngIf="!expended"  nbTooltip="{{'DASH.expandAll' | translate}}" (click)="toggle()">
+                <fa-icon [icon]="faIcon.faArrowCircleDown"></fa-icon>
+              </nb-action>
+            </span>  
+          </div>
+      </div>
+      <div *ngIf="showSearchform"  class="col-sm-12 bg-pink pb-2 rounded-bottom" >
+        <div [@searchAnimation] class="input-group input-group-sm">
+            <input type="text" name="table_search" class="form-control pull-right" placeholder="{{'DASH.searchSensor' | translate}}"
+                [(ngModel)]="search.name" #sSearch autofocus>
+        </div>
+    </div>
+      <nb-accordion *ngIf="isRt()" multi>
+        <nb-accordion-item [collapsed]="false" *ngFor="let rt of 
+        addSensorName(
+          rtSensors[dataManagementService.selectedInstallation?.id]
+          [dataManagementService.selectedStation?.id])
+           | filterBy: search" [id]="'details-sensor-'+rt.sensorId" #item>
+          <nb-accordion-item-header class="py-3 bg-ltgrey">
+          <span>{{ rt.name | uppercase}}</span> 
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            <div class="d-flex justify-content-between align-items-center mb-0" >
+              <div class="date font-weight-bold d-flex justify-content-between align-items-center">
+                <fa-icon [icon]="faIcon.faClock" class="font-weight-bold"></fa-icon> 
+                <small class="font-weight-bold ml-1"> {{rt.lastTime | date: 'dd-MM-yyyy HH:mm:ss'}} </small>
+              </div>
+              <fa-icon [icon]="faIcon.faHistory"  class="pointer"  nbTooltip="{{'DASH.historyShort' | translate}}" (click)="selectedCompartor(rt.sensorId)"></fa-icon>
+            </div>
+            <div class="details">
+              <div *ngIf="rt.avg != null" class="parameter">
+                <span class="parameter-name">avg</span>
+                <span class="parameter-value">{{rt.avg}} 
+                  <span class="small">{{  rt.unit? ' '+ rt.unit: ''}}</span>
+                </span>
+              </div>
+              <div *ngIf="rt.min != null" class="parameter">
+                <span class="parameter-name">min</span>
+                <span class="parameter-value">{{rt.min}} 
+                  <span class="small">{{  rt.unit? ' '+ rt.unit: ''}}</span>
+                </span>
+              </div>
+              <div *ngIf="rt.max != null" class="parameter">
+                <span class="parameter-name">max</span>
+                <span class="parameter-value">{{rt.max}} 
+                  <span class="small">{{  rt.unit? ' '+ rt.unit: ''}}</span>
+                </span>
+              </div>
+              <div *ngIf="rt.sum != null" class="parameter">
+                <span class="parameter-name">sum</span>
+                <span class="parameter-value">{{rt.sum}} 
+                  <span class="small">{{  rt.unit? ' '+ rt.unit: ''}}</span>
+                </span>
+              </div>
+              <div *ngIf="rt.last != null" class="parameter">
+                <span class="parameter-name">{{'DASH.last' | translate}}</span>
+                <span class="parameter-value">{{rt.last}} 
+                  <span class="small">{{  rt.unit? ' '+ rt.unit: ''}}</span>
+                </span>
+              </div>
+              <div *ngIf="rt.time != null" class="parameter">
+                <span class="parameter-name">time</span>
+                <span class="parameter-value">{{rt.time}} 
+                  <span class="small">{{  rt.unit? ' '+ rt.unit: ''}}</span>
+                </span>
+              </div>
+            </div>
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+        </nb-accordion>
+    </nb-tab>
+  </nb-tabset>
+</nb-card>

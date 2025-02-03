@@ -1,0 +1,104 @@
+<div id="cron-container" class="p-3 mb-3">
+  <div class="form-group row">
+    <label class="label col-2 col-form-label">Date</label>
+    <div class="row pr-0 col-9">
+      <div class="col px-0 mr-2">
+        <input nbInput  placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="from" 
+        class="form-control mb-2" name="startDate" 
+        [formControl]="startDateControl" (ngModelChange)="cron.from.date=$event">
+        <nb-datepicker #from singleColumn style="display:none;">
+        </nb-datepicker>
+      </div>
+      <div class="col px-0">
+        <input nbInput placeholder="{{'HISTORY.endDate' | translate}}" [nbDatepicker]="to" 
+        class="form-control mb-2" name="endDate"
+         [formControl]="endDateControl"  (ngModelChange)="cron.to.date=$event">
+        <nb-datepicker #to singleColumn></nb-datepicker>
+      </div>
+    </div>
+    <div class="col-1 pr-0 reset-group"> <span nbTooltip="{{'ALERT.resetDate' | translate}}" 
+       class="reset mt-2 float-right pointer"  (click)="onResetDateRange()">
+        <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon>
+      </span></div>
+  </div>
+  
+  <div *ngIf="!hideCustomTime" class="form-group row">
+    <label class="label col-2 col-form-label">{{'ALERT.hour' | translate}}</label>
+    <div class="row pr-0 col-9">
+      <div class="col mr-md-2">
+        <div class="row mb-2 ">
+          <nb-select  size="small" status="primary" name="from-hour" [(selected)]="cron.from.time.hours"
+            (selectedChange)="timeChanged()" placeholder="HH"  class="col px-0">
+            <nb-option *ngFor="let hour of hours" [value]="hour.value">{{hour.label}}</nb-option>
+          </nb-select>
+          <nb-select  size="small" status="primary" name="from-min" [(selected)]="cron.from.time.minutes"
+            (selectedChange)="timeChanged()" placeholder="MM" disabled  class="col px-0">
+            <nb-option *ngFor="let mn of minutes" [value]="mn.value">{{mn.label}}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <nb-select size="small" status="primary" name="2-hour" [(selected)]="cron.to.time.hours"
+            (selectedChange)="timeChanged()" placeholder="HH" class="col px-0">
+            <nb-option *ngFor="let hour of hours" [value]="hour.value">{{ hour.label }}</nb-option>
+          </nb-select>
+          <nb-select size="small" status="primary" name="2-min" [(selected)]="cron.to.time.minutes"
+            (selectedChange)="timeChanged()" placeholder="MM" disabled  class="col px-0">
+            <nb-option *ngFor="let mn of minutes" [value]="mn.value">{{ mn.label }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+    </div>
+    <div class="col-1 pr-0 reset-group"> <span nbTooltip="{{'ALERT.resetHour' | translate}}" class="reset mt-2 float-right pointer" (click)="onResetTime()"> 
+      <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon>
+    </span></div>
+  </div>
+<!-- kkk -->
+  <div *ngIf="showTimeLimits " class="form-group row">
+    <label class="label col-2 col-form-label mt-1">Plage horaire quotidienne</label>
+    <div class="row pr-0 col-9 w-100 d-flex flex-md-row flex-column justify-content-between">
+      <nb-radio-group *ngIf="showTimeLimits" [(value)]="cron.timePlan" class="mr-4 d-flex" status="primary">
+        <nb-radio class="mt-2" *ngFor="let plan of timePlan" [value]="plan" (valueChange)="change(plan)">
+          {{ plan | titlecase }}
+        </nb-radio>
+      </nb-radio-group>
+    </div>
+    <div class="col-1 pr-0 reset-group"> <span  nbTooltip="{{'ALERT.reset' | translate}} " class="reset mt-3 float-right pointer" 
+      (click)="onResetTime()">
+      <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon>
+      </span></div>
+  </div>
+<!-- kkk -->
+
+  <div *ngIf="owner != 'ANME' && (!hideCustomTime || showTimeLimits)" class="form-group row">
+    <label class="label col-2 col-form-label">{{'ALERT.days' | translate}}</label>
+    <div class="row mt-2 pr-0 col-9 w-100 d-flex flex-md-row flex-column justify-content-between">
+      <nb-checkbox name="d-mon" [(ngModel)]="cron.days.monday">
+        Mon
+      </nb-checkbox>
+      <nb-checkbox name="d-tue" [(ngModel)]="cron.days.tuesday">
+        Tue
+      </nb-checkbox>
+      <nb-checkbox name="d-wed" [(ngModel)]="cron.days.wednesday">
+        Wed
+      </nb-checkbox>
+      <nb-checkbox name="d-thur" [(ngModel)]="cron.days.thursday">
+        Thu
+      </nb-checkbox>
+      <nb-checkbox name="d-fri" [(ngModel)]="cron.days.friday">
+        Fri
+      </nb-checkbox>
+      <nb-checkbox name="d-sat" [(ngModel)]="cron.days.saturday">
+        Sat
+      </nb-checkbox>
+      <nb-checkbox name="d-sun" [(ngModel)]="cron.days.sunday">
+        Sun
+      </nb-checkbox>
+    </div>
+    <div class="col-1 pr-0 reset-group"> <span  nbTooltip="{{'ALERT.resetDays' | translate}}" class="reset mt-2 float-right pointer" 
+      (click)="onResetWeekDays()"> 
+      <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon>
+    </span></div>
+  </div>
+</div>

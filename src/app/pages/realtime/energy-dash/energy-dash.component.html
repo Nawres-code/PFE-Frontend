@@ -1,0 +1,11 @@
+<ng-container [ngSwitch]="owner">
+    <router-outlet *ngSwitchDefault></router-outlet> 
+    <div class="row" *ngSwitchCase="'AZIZA'">
+        <div class="col-md-3" *ngIf="menuExpanded">
+            <sidepanel></sidepanel>
+        </div>
+        <div [ngClass]="{'col-md-9':menuExpanded , 'col-md-12':!menuExpanded }">
+           <router-outlet></router-outlet>
+        </div>
+    </div>
+</ng-container>

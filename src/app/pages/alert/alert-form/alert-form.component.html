@@ -1,0 +1,166 @@
+<div *ngIf="render.operatorGroup && (showValue1 || showValue2)" class="form-group row" id="operator-group">
+  <label for="inputOperator" class="label col-2 col-form-label">{{'ALERT.operator' | translate}}</label>
+  <div class="col-9">
+    <nb-select fullWidth status="primary" placeholder="Operateur" [(selected)]="valueConfig.operator"
+    (selectedChange)="onOperatorChange($event)" id="inputOperator" >
+    <nb-option  [value]="'Between'"> BETWEEN </nb-option>
+    <nb-option  [value]="'Not between'"> NOT_BETWEEN</nb-option>
+    <nb-option  [value]="'>='"> MAX </nb-option>
+    <nb-option  [value]="'<='"> MIN</nb-option>
+    <!-- <nb-option  [value]="'='"> EQUAL </nb-option>
+    <nb-option  [value]="'!='"> NOT_EQUAL</nb-option> -->
+    <!-- <nb-option  [value]="'IN'"> IN </nb-option>
+    <nb-option  [value]="'OUT'"> OUT </nb-option> -->
+  </nb-select>
+  </div>
+  <div class="col-1 mt-2 reset-group ">
+    <span (click)="onResetOperator()" nbTooltip="{{'ALERT.resetOperator' | translate}}"  class="reset" style="cursor: pointer;">
+    <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon></span></div>
+</div>
+
+<div *ngIf="showValue1 || showValue2" class="form-group row">
+  <label class="label col-2 col-form-label">{{'ALERT.value' | translate}}</label>
+  <div class="row pr-0 mr-2" [ngClass]="{'col-9': !disableValue1, 'col-10': disableValue1}">
+    <div class="pr-0" [ngClass]="{'col':showValue2, 'col-12':!showValue2}">
+      <nb-form-field>
+        <input  nbInput fullWidth status="primary" type="number" class="form-control" id="inputval-1"
+         name="value-1" [placeholder]="placeholderValue1" [disabled]="disableValue1" [max]="maxValue" 
+         [min]="minValue" [step]="valueStep" [(ngModel)]="valueConfig.value1">
+         <span nbSuffix> {{getUnit()}}</span>
+      </nb-form-field>
+  </div>
+  <div *ngIf="showValue2" class="pr-0" [ngClass]="{'col':showValue1, 'col-12':!showValue1}">
+    <nb-form-field>
+      <input  nbInput fullWidth status="primary" type="number" class="form-control" id="inputval-2"
+       name="value-2" [placeholder]="placeholderValue2" [disabled]="disableValue2" [max]="maxValue" 
+       [min]="minValue" [step]="valueStep" [(ngModel)]="valueConfig.value2">
+       <span nbSuffix> {{getUnit()}}</span>
+    </nb-form-field>
+  </div>
+  <!-- <div class="col pr-0" [ngClass]="">
+    <input nbInput fullWidth status="primary" *ngIf="showValue2" type="number" class="form-control" name="value-2"
+     [(ngModel)]="valueConfig.value2" 
+    [placeholder]="placeholderValue2" [disabled]="disableValue2" [max]="maxValue" [min]="minValue" [step]="valueStep">
+  </div> -->
+  </div>
+  <div *ngIf="!disableValue1" class="col-1 mt-2 ml-md-1 reset-group">
+    <span  nbTooltip="{{'ALERT.resetValue' | translate}}" (click)="onResetValue()" class="reset "
+     style="cursor: pointer;">
+      <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon>
+    </span>
+  </div>
+</div>
+
+<div *ngIf="(showValue1 || showValue2) && alert.type == 'TEMPERATURE_THRESHOLD'" class="form-group row">
+  <label class="label col-2 col-form-label"></label> 
+  <div class="col-10">
+    <nb-checkbox #customValue [checked]="customOn" (checkedChange)="onCustomValue(customValue.checked)" >{{'ALERT.custom' | translate}}</nb-checkbox>
+  </div>
+</div>
+
+
+<div *ngIf="render.periodGroup" class="form-group row" id="period-group">
+  <label for="inputPeriod" class="label col-2 col-form-label">{{'ALERT.period' | translate}}</label>
+  <div class="col-9">
+      <input nbInput fullWidth status="primary" id="inputPeriod" type="number" class="form-control" name="inputPeriod"
+        [(ngModel)]="alert.pendingPeriod" placeholder="{{'ALERT.period' | translate}}"  [min]="0" [step]="5">
+  </div>
+  <div class="col-1 mt-2 reset-group ">
+    <span (click)="onResetPeriod()" nbTooltip="Réinitialiser période"  class="reset" style="cursor: pointer;">
+    <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon></span></div>
+</div>
+
+<div *ngIf="render.msgGroup" class="form-group row">
+  <label for="inputMsg" class="label col-2 col-form-label">Message</label>
+  <div class="col-9 ">
+    <div class="input-group">
+      <textarea rows="2" nbInput status="primary" id="inputMessage" fullWidth   placeholder="Message"
+      [(ngModel)]="alert.message" name="message">
+    </textarea>
+<!-- <input nbInput status="primary" id="inputMessage" type="number" class="form-control" name="inputPeriod"
+        [placeholder]="Période"  [min]="0" [step]="5"> -->
+    </div>
+  </div>
+  <div class="col-1 mt-2 reset-group "><span nbTooltip="Réinitialiser message"  (click)="onResetMsg()" class="reset" style="cursor: pointer;">
+    <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon></span></div>
+</div>
+
+
+<div class="form-group row">
+  <label for="inputEmails" class="label col-2 col-form-label">Emails</label>
+  <div class="col-9 ">
+    <nb-form-field>
+    <input  nbInput fullWidth status="primary" type="email" class="form-control" id="inputEmails"
+     name="email" placeholder="Email" [(ngModel)]="emailInput">
+    <button nbSuffix nbButton ghost (click)="onAddEmail()" nbTooltip="{{'ALERT.addMail' | translate}}">
+      <nb-icon icon="plus-square" pack="eva"></nb-icon>
+    </button>
+  </nb-form-field>
+    <!-- <div class="input-group">
+      <input type="email" class="form-control" id="email" name="email" placeholder="Email" 
+      [(ngModel)]="emailInput" [ngClass]="{'email': alert.email}" >
+      <div class="input-group-append">
+        <button class="btn btn-secondary btn" type="button" id="button-addon2" 
+        (click)="onAddEmail()" [ngClass]="{'email-btn-append': alert.email}">
+        <fa-icon [icon]="faIcon.faPlus" aria-hidden="true"></fa-icon></button>
+      </div>
+    </div> -->
+    <SELECT *ngIf="alert.email" size="3" class="form-control border-top-0" style=" overflow-y: scroll; border-top-left-radius:unset; border-top-right-radius:unset;">
+      <OPTION *ngFor="let email of alert.email.split(',')">{{email}}</OPTION>
+    </SELECT>
+  </div>
+  <div class="col-1 mt-2 reset-group "><span nbTooltip="{{'ALERT.resetEmail' | translate}}" (click)="onResetEmail()" class="reset" style="cursor: pointer;">
+      <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon></span></div>
+</div>
+
+<div *ngIf="render.smsGroup" class="form-group row">
+  <label for="inputSms" class="label col-2 col-form-label">Sms</label>
+  <div class="col-9 ">
+    <div class="input-group">
+      <input type="text" class="form-control" id="sms" name="sms" placeholder="Sms" [(ngModel)]="smsInput" [ngClass]="{'email': alert.sms}" >
+      <div class="input-group-append">
+        <button class="btn btn-secondary btn" type="button" id="button-addon2"    (click)="onAddSms()" [ngClass]="{'email-btn-append': alert.sms}">
+          <fa-icon [icon]="faIcon.faPlus"aria-hidden="true"></fa-icon></button>
+      </div>
+    </div>
+    <SELECT *ngIf="alert.sms" size="3" class="form-control border-top-0" style=" overflow-y: scroll; border-top-left-radius:unset; border-top-right-radius:unset;">
+      <OPTION *ngFor="let sms of alert.sms.split(',')">{{sms}}</OPTION>
+    </SELECT>
+  </div>
+  <div class="col-1 mt-2 reset-group "><span nbTooltip="Réinitialiser sms"  (click)="onResetSms()" class="reset" style="cursor: pointer;">
+      <fa-icon [icon]="faIcon.faUndo" aria-hidden="true"></fa-icon></span></div>
+</div>
+
+<div *ngIf="owner != 'ANME' && (showValue1 || showValue2)" class="form-group mb-3">
+  <span  *ngIf="!showAdvancedSettings" (click)="collapseAdvancedSettings()" class="pointer-cursor">
+    <fa-icon [icon]="faIcon.faPlusSquare"></fa-icon>
+    <span class="link ml-2">{{'ALERT.showAdvancedSettings' | translate}}</span>
+  </span>
+  <span   *ngIf="showAdvancedSettings" (click)="collapseAdvancedSettings()" class="pointer-cursor">
+    <fa-icon [icon]="faIcon.faMinusSquare"></fa-icon>
+    <span class="link ml-2">{{'ALERT.hideAdvancedSettings' | translate}}</span>
+  </span>
+</div> 
+<ngx-cron-settings *ngIf="showAdvancedSettings && (showValue1 || showValue2)" [cron]="cron" [showTimeLimits]="showTimeLimits"
+  [hideWeekDays]="hideWeekDays" [hideDateRange]="hideDateRange" [hideCustomTime]="hideCustomTime">
+</ngx-cron-settings>
+
+<button nbTooltip="{{'ALERT.save' | translate}}"  type="submit" nbButton status="primary" size="medium" class="col-xs-12 col-md-3 btns pointer  ml-2 float-right"  (click)="onSubmit()">
+  <fa-icon [icon]="faIcon.faCheckCircle" class="mr-2"></fa-icon>
+  <span >{{'ALERT.save' | translate}} </span>
+</button>
+  <!-- <button *ngIf="alert.id==0" nbButton nbTooltip="Précédent"  type="reset" status="basic" size="medium" class="col-xs-12 col-md-3 btns pointer float-left" (click)="onBack()">
+    <fa-icon [icon]="faIcon.faArrowCircleLeft" class="mr-2"></fa-icon>
+    <span >Précédent</span>
+  </button> -->
+  <button nbTooltip="{{'ALERT.cancel' | translate}}" nbButton type="reset" status="basic" size="medium" class="col-xs-12 col-md-3 btns pointer float-right" (click)="onCancel()">
+    <fa-icon [icon]="faIcon.faTimesCircle" class="mr-2"></fa-icon>    
+    <span >{{'ALERT.cancel' | translate}}</span>
+  </button>
+
+
+<!-- <div class="form-group d-flex flex-row">
+  <button class="btn btn-danger mr-2" " style="cursor: pointer;" [nbSpinner]="validate"
+    nbSpinnerStatus="warning">Enregister</button>
+  <button class="btn btn-secondary" (click)="onCacnel()" style="cursor: pointer;">Annuler</button>
+</div> -->

@@ -1,0 +1,132 @@
+@import '../../../../@theme/styles/themes.scss';
+
+@include nb-install-component() {
+  nb-tabset {
+    display: flex;
+    flex-direction: column;
+    height: calc(#{nb-theme(card-height-large)} + 3.5rem);
+  }
+
+  nb-tab {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+   
+  }
+
+  .contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: nb-theme(color-fg);
+    padding: 1rem;
+    &:not(:last-child) {
+      border-bottom: 1px solid nb-theme(separator);
+      @include nb-for-theme(corporate) {
+        border-bottom-color: nb-theme(tabs-separator);
+      }
+    }
+  }
+
+  .i-contact {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-basic-500);
+  }
+
+  .time {
+    font-size: 0.875rem;
+    font-weight: nb-theme(font-weight-light);
+    text-transform: uppercase;
+  }
+
+  .fa-history:hover{
+    color: var(--color-primary-default) !important;
+  }
+
+  ::ng-deep  nb-user  {
+    .info-container {
+      @include nb-ltr(margin-left, 0.875rem);
+      @include nb-rtl(margin-right, 0.875rem);
+    }
+
+    .user-name {
+      font-family: nb-theme(font-secondary);
+      font-weight: nb-theme(font-weight-bold);
+      color: nb-theme(color-fg-heading);
+      font-size: 1.25rem;
+      @include nb-for-theme(cosmic) {
+        font-weight: nb-theme(font-weight-bolder);
+      }
+    }
+
+    .user-title {
+      font-size: 0.875rem;
+      font-weight: nb-theme(font-weight-light);
+      text-transform: uppercase;
+    }
+    &.selected .user-container .user-picture{ 
+      background-color: var(--color-primary-default);
+      color: white !important;
+    }
+    &.selected .user-container .info-container .user-name { 
+      color: var(--color-primary-default) !important;
+      font-weight: 700 !important;
+    }
+  }
+
+}
+
+.details {
+  display: flex;
+  justify-content: space-around;
+  .parameter {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    .parameter-name {
+      font-family: nb-theme(font-main);
+      font-size: 1rem;
+      font-weight: nb-theme(font-weight-light);
+      line-height: 2rem;
+      color:#a4abb3;
+    }
+    .parameter-value {
+      font-family: nb-theme(font-secondary);
+      color: nb-theme(color-fg-heading);
+      font-weight: nb-theme(font-weight-bolder);
+    }
+  }
+}
+
+.pointer{
+  cursor: pointer !important;
+}
+
+.user-selected {
+ color: var(--color-primary-default) !important;
+}
+
+// .selected{
+//   color:#40dc7e;
+// }
+
+.color-ltgrey {
+  color: #4b4b4b !important;
+}
+
+.bg-ltgrey {
+  background-color: #f3f3f3 !important;
+}
+
+::ng-deep .user-container .info-container .user-name {
+  font-weight: 500;
+  font-size: 14px !important;
+}
+::ng-deep .user-container .user-picture {
+  border-width: thin;
+    // color: black !important;
+    padding: 1rem !important;
+
+}
+

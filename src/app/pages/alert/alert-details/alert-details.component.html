@@ -1,0 +1,97 @@
+<div class="row pr-md-3">
+  <div class="col-12 col-md-9">
+    <div class="col-12 col-sm-6 col-md-8" id="labels">
+      <span *ngIf="alert.zoneId" id="zone-id" class="bold-small zoneBox"> {{getZoneName() | uppercase}}</span>
+      <span *ngIf="alert.zoneId" class="bold-small zoneBox"> <nb-icon status="primary" icon="chevron-right-outline"></nb-icon></span> 
+      
+      <span *ngIf="alert.fatherId" id="father-id" class="bold-small instBox"> {{getFatherName() | uppercase}}</span>
+      <span *ngIf="alert.fatherId" class="bold-small instBox"> <nb-icon status="primary"  icon="chevron-right-outline"></nb-icon></span> 
+     
+  
+      <span id="measure-name" class="bold-small measureBox">
+        {{ getAlertMeasureName() | uppercase}}
+      </span>
+      <span id="alert-type" class="badge badge-pill ml-3" 
+      [ngClass]="{'badge-danger':alert.type == 'TEMPERATURE_THRESHOLD',
+       'badge-secondary':alert.type== 'DISCONNECTION',
+       'badge-energy':alert.type == 'ENERGY' || alert.type == 'SIMPLE',
+       'badge-dephasage':alert.type == 'DEPHASAGE' || alert.type == 'SIMPLE_VAL',
+       'badge-power':alert.type == 'POWER',
+       'badge-amperage':alert.type == 'AMPERAGE',
+       'badge-water':alert.type == 'EAU',
+       'badge-calorifique':alert.type == 'CALORIFIQUE',
+       'badge-gaz':alert.type == 'GAZ',
+       'badge-voltage':alert.type == 'VOLTAGE'}">{{alertService.getAlertLabel(alert.type,alert.measureType)}}</span>
+     
+    </div>
+    <div class="col-12 col-sm-6 col-md-8"  id="value-cfg">
+      <span *ngIf="strValueConfig"
+      class="pr-2">{{strValueConfig}}</span>
+    </div>
+    <div class="col-12 col-sm-6 col-md-8 text-muted mt-1" id="cron-details" style="font-size: small;" >
+      <span id="datetime-details" class="row pl-1 ml-1 left-border">
+        <span id="date-details">
+          <span id="from-date" *ngIf="cron.from.date"><span class="text-muted"> {{ 'ALERT.from' | translate }} </span> {{cron.from.date | date: 'dd/MM/yyyy'}}</span>
+          <span id="to-date" *ngIf="cron.to.date" class=""> <span class="text-muted"> {{ 'ALERT.to' | translate }}  </span> {{cron.to.date | date: 'dd/MM/yyyy'}}</span>
+        </span>
+        <span id="time-detail">
+          <span id="from-time" *ngIf="cron.from.time" class="">, {{(cron.from.time.hours| number :
+            '2.0')+':'+(cron.from.time.minutes| number : '2.0')}}</span>
+          <span class="text-muted" *ngIf="cron.from.time && cron.to.time"> - </span>
+          <span id="to-time" *ngIf="cron.to.time" class="">{{(cron.to.time.hours | number :
+            '2.0')+':'+(cron.to.time.minutes | number : '2.0')}}</span>
+        </span>
+      </span>
+      <span id="time-plan" *ngIf="timePlan" class="pl-1 ml-1 left-border row">{{timePlan | titlecase}}</span>
+      <span id="week-days" *ngIf="weekDays" class="pl-1 ml-1 left-border row "> {{weekDays | titlecase}}</span>
+    </div>
+  </div>
+  <div class="col-12 col-md-3">
+    <div class="row  my-2 justify-content-center justify-content-md-end">
+      <nb-toggle status="basic" size="small" class="" [checked]="alert.isActive" (checkedChange)="OnToggleChange()" nbTooltip="{{'TOOLTIP.toggleActiv' | translate }}"></nb-toggle>
+      <span (click)="OnEdit()" class="ml-3 mb-2 ">
+        
+      <fa-icon [icon]="faIcon.faPencilAlt" class="pointer action-red" nbTooltip="{{'TOOLTIP.edit' | translate }}"></fa-icon></span>
+      <span [nbPopover]="tabsComponent" class="ml-3 "><fa-icon [icon]="faIcon.faTrashAlt" class=" pointer action-red" nbTooltip="{{'TOOLTIP.delete' | translate }}" (click)="onSupp()"></fa-icon></span>
+    </div>  
+  </div>
+</div>
+
+
+<!-- <div class="d-flex flex-md-row flex-column">
+  <div class="d-flex flex-column flex-md-row  w-100  align-self-center flex-wrap">
+    <div class="d-flex align-items-start align-items-md-center">
+    <span *ngIf="alert.fatherId" id="father-id" class="bold-small"> {{getFatherName() | uppercase}}</span>
+    <span *ngIf="alert.fatherId" class="bold-small px-2">-</span>
+    <span *ngIf="owner != 'ANME'" id="measure-name" class="bold-small"> 
+      {{ getInputCatName() +' '+ alert.measureName | uppercase}}
+    </span>
+    <span *ngIf="owner == 'ANME'" id="measure-name" class="bold-small"> 
+      {{ getAlertMeasureName() | uppercase}}
+    </span>
+    </div>
+    <div class="d-flex align-items-start align-items-md-center ml-md-2">
+    <span class="bold-small d-none d-md-block mr-2">-</span>
+    <span id="alert-type" class="bold-small mr-2">{{getAlertLabel()}}</span>
+    <span id="value-cfg" *ngIf="strValueConfig && alert.type != 'TEMPERATURE_THRESHOLD'" class="px-2">{{strValueConfig}}</span>
+    </div>
+    <div class="cron-container">
+      <span id="date-details">
+        <span  id="from-date" *ngIf="cron.from.date">From {{cron.from.date | date: 'dd/MM/yyyy'}}</span>
+        <span id="to-date" *ngIf="cron.to.date" class="pl-2">To {{cron.to.date | date: 'dd/MM/yyyy'}}</span>
+      </span>
+      <span id="time-detail">
+        <span id="from-time" *ngIf="cron.from.time" class="pl-1">{{(cron.from.time.hours| number : '2.0')+':'+(cron.from.time.minutes| number : '2.0')}}</span>
+        <span *ngIf="cron.from.time && cron.to.time"> - </span>
+        <span id="to-time" *ngIf="cron.to.time" class="pl-1">{{(cron.to.time.hours | number : '2.0')+':'+(cron.to.time.minutes | number : '2.0')}}</span>
+      </span>
+      <span id="time-plan" *ngIf="timePlan" class="pl-2">{{timePlan | titlecase}}</span>
+      <span id="week-days" *ngIf="weekDays" class="pl-1 ml-1 left-border"> {{weekDays | titlecase}}</span>
+    </div>
+  </div>
+  <div class="d-flex flex-row justify-content-between large mt-md-2 mt-3 mr-md-0 mx-auto">
+     <nb-toggle status="basic" size="small" [checked]="alert.isActive"  (checkedChange)="OnToggleChange()"></nb-toggle>
+    <span (click)="OnEdit()" class="ml-3 mb-2"><fa-icon [icon]="faIcon.class="fas fa-pencil-alt  pointer action-red"></fa-icon></span>
+    <span (click)="OnDelete()" class="ml-3"><fa-icon [icon]="faIcon.class="far fa-trash-alt  pointer action-red"></fa-icon></span>
+  </div>
+</div> -->

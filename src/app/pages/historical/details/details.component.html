@@ -1,0 +1,139 @@
+
+<div class="row mb-3">
+  <div class="col-md-12">
+    <nb-card class="mb-0" accent="primary">
+    <nb-accordion accent="primary">
+      <nb-accordion-item class="inline-form-card"  [expanded]="formExpanded">
+       <nb-accordion-item-header> 
+        <nb-icon status="primary" icon="bar-chart"></nb-icon><span class="ml-2">{{'HISTORY.details' | translate}}</span></nb-accordion-item-header>
+       <nb-accordion-item-body>
+        <form class="form-inline">
+          <nb-select fullWidth *ngIf="render.detailsZone" id="details-zone" placeholder="Zone" [(selected)]="selectedZones" class="col-12 col-md-1 px-0"
+            (selectedChange)="chooseZone($event)">
+            <nb-option *ngFor="let zone of orderArrayByName(dataManagementService.tenantData.zones)" [value]="zone">{{zone.name | uppercase}}
+            </nb-option>
+          </nb-select>
+          <nb-select fullWidth *ngIf="render.detailsSite" id="details-site" placeholder="Site" [(selected)]="selectedZones" class="col-12 col-md-1 px-0"
+            (selectedChange)="chooseZone($event)">
+            <nb-option *ngFor="let zone of orderArrayByName(dataManagementService.tenantData.zones)" [value]="zone">{{zone.name | uppercase}}
+            </nb-option>
+          </nb-select>
+          <nb-select fullWidth *ngIf="render.detailsInstallation" id="details-installation" placeholder="Installation" [(selected)]="selectedInstallations" class="col-12 col-md-1 px-0"
+            (selectedChange)="chooseInstallation($event)">
+            <nb-option *ngFor="let installation of orderArrayByName(installations)" [value]="installation">
+              {{installation.name | uppercase}}
+            </nb-option>
+          </nb-select>
+          <nb-select fullWidth *ngIf="render.detailsChambre"   id="details-chambre" placeholder="{{'HISTORY.chamber' | translate}}" [(selected)]="selectedInstallations" class="col-12 col-md-1 px-0"
+            (selectedChange)="chooseInstallation($event)">
+            <nb-option *ngFor="let installation of orderArrayByName(filterForUser(installations))" [value]="installation">
+              {{installation.name | uppercase}}
+            </nb-option>
+          </nb-select>
+          <nb-select fullWidth *ngIf="render.detailsDepot"  id="details-depot" placeholder="Depot" [(selected)]="selectedInstallations" class="col-12 col-md-1 px-0"
+            (selectedChange)="chooseInstallation($event)" (selectedChange)="chooseInstallation($event)">
+            <nb-option *ngFor="let installation of orderArrayByName(filterForUser(installations))" [value]="installation">
+              {{installation.name | uppercase}}
+            </nb-option>
+          </nb-select>
+          
+          <nb-select fullWidth *ngIf="render.detailsType"  id="details-type" placeholder="TYPE" [(selected)]="vars[0]" class="col-12 col-md-2 px-0">
+            
+            <nb-option-group *ngIf="render.detailsTypeGroupIO && selectedInstallations?.type == 'io_impulse'" id="details-type-groupiO" title="Gaz/Fluid">
+              <nb-option *ngFor="let ioType  of getAllIoTypes(selectedInstallations)" [value]="'IO_'+ioType">{{ioType}}</nb-option>
+            </nb-option-group>
+            
+            <nb-option-group *ngIf="render.detailsTypeGroupPower && selectedInstallations?.type != 'io_impulse'" id="details-type-groupPower" title="Power">
+              <nb-option *ngIf="render.detailsTypePowerInstOpt" id="details-type-power-instOpt" value="grouped_power_inst">Power inst</nb-option>
+              <nb-option *ngIf="render.detailsTypePowerMaxOpt" id="details-type-power-maxOpt" value="grouped_power_max">Power max</nb-option>
+              <nb-option *ngIf="render.detailsTypePowerMinOpt" id="details-type-power-minOpt" value="grouped_power_min">Power min</nb-option>
+              <nb-option *ngIf="render.detailsTypePowerMoyOpt" id="details-type-power-moyOpt" value="grouped_power_moy">Power moy</nb-option>
+            </nb-option-group>
+            <nb-option-group *ngIf="render.detailsTypeGroupPowerPhase && selectedInstallations?.type != 'io_impulse'" id="details-type-groupPowerPhase" title="Power per phase">
+              <nb-option *ngIf="render.detailsTypePowerInstPhaseOpt" id="details-type-power-inst-phaseOpt" value="power_inst">Power inst phase</nb-option>
+              <nb-option *ngIf="render.detailsTypePowerMaxPhaseOpt" id="details-type-power-max-phaseOpt" value="power_max">Power max phase</nb-option>
+              <nb-option *ngIf="render.detailsTypePowerMinPhaseOpt" id="details-type-power-min-phaseOpt" value="power_min">Power min phase</nb-option>
+              <nb-option *ngIf="render.detailsTypePowerMoyPhaseOpt" id="details-type-power-moy-phaseOpt" value="power_moy">Power moy phase</nb-option>
+            </nb-option-group>
+            <nb-option-group *ngIf="render.detailsTypeGroupCurrent && selectedInstallations?.type != 'io_impulse'" id="details-type-groupCurrent" title="Current">
+              <nb-option *ngIf="render.detailsTypeCurrentInstOpt" id="details-type-current-instOpt" value="grouped_current_inst">Curent inst</nb-option>
+              <nb-option *ngIf="render.detailsTypeCurrentMaxOpt" id="details-type-current-maxOpt" value="grouped_current_max">Curent max</nb-option>
+              <nb-option *ngIf="render.detailsTypeCurrentMinOpt" id="details-type-current-minOpt" value="grouped_current_min">Curent min</nb-option>
+              <nb-option *ngIf="render.detailsTypeCurrentMoyOpt" id="details-type-current-moyOpt" value="grouped_current_moy">Curent moy</nb-option>
+            </nb-option-group>
+            <nb-option-group *ngIf="render.detailsTypeGroupCurrentPhase && selectedInstallations?.type != 'io_impulse'" id="details-type-groupCurrentPhase" title="Current per phase">
+              <nb-option *ngIf="render.detailsTypeCurrentInstPhaseOpt" id="details-type-Current-inst-phaseOpt" value="Current_inst">Current inst phase</nb-option>
+              <nb-option *ngIf="render.detailsTypeCurrentMaxPhaseOpt" id="details-type-Current-max-phaseOpt" value="Current_max">Current max phase</nb-option>
+              <nb-option *ngIf="render.detailsTypeCurrentMinPhaseOpt" id="details-type-Current-min-phaseOpt" value="Current_min">Current min phase</nb-option>
+              <nb-option *ngIf="render.detailsTypeCurrentMoyPhaseOpt" id="details-type-Current-moy-phaseOpt" value="Current_moy">Current moy phase</nb-option>
+            </nb-option-group>
+            <nb-option-group *ngIf="render.detailsTypeGroupVoltage && selectedInstallations?.type != 'io_impulse'" id="details-type-groupVoltage" title="Voltage">
+              <nb-option *ngIf="render.detailsTypeVoltageInstOpt" id="details-type-voltage-instOpt" value="voltage_inst">Voltage inst</nb-option>
+              <nb-option *ngIf="render.detailsTypeVoltageMaxOpt" id="details-type-voltage-maxOpt" value="voltage_max">Voltage max</nb-option>
+              <nb-option *ngIf="render.detailsTypeVoltageMinOpt" id="details-type-voltage-minOpt" value="voltage_min">Voltage min</nb-option>
+              <nb-option *ngIf="render.detailsTypeVoltageMoyOpt" id="details-type-voltage-moyOpt" value="voltage_loy">Voltage moy</nb-option>
+            </nb-option-group>
+            <nb-option-group *ngIf="render.detailsTypeGroupCosphi && selectedInstallations?.type != 'io_impulse'" id="details-type-groupCosphi" title="Cos Φ">
+              <nb-option *ngIf="render.detailsTypeCosphiInstOpt" id="details-type-cosphi-instOpt" value="phase_inst">Cos Φ inst</nb-option>
+              <nb-option *ngIf="render.detailsTypeCosphiMaxOpt" id="details-type-cosphi-maxOpt" value="phase_max">Cos Φ max</nb-option>
+              <nb-option *ngIf="render.detailsTypeCosphiMinOpt" id="details-type-cosphi-minOpt" value="phase_min">Cos Φ min</nb-option>
+              <nb-option *ngIf="render.detailsTypeCosphiMoyOpt" id="details-type-cosphi-moyOpt" value="phase_moy">Cos Φ moy</nb-option>
+            </nb-option-group>
+            <nb-option-group *ngIf="render.detailsTypeGroupSonde"  id="details-type-groupSonde" title="Sonde">
+              <nb-option *ngIf="render.detailsTypeTempOption" id="details-type-tempOption" value="temperature">Temperature</nb-option>
+              <nb-option *ngIf="render.detailsTypeHumOption" id="details-type-humOption" value="humidity">Humidity</nb-option>
+            </nb-option-group>
+            <nb-option-group *ngIf="render.detailsTypeGroupFroid" id="details-type-groupFroid" title="Froid">
+              <nb-option *ngIf="render.detailsTypePointOption" id="details-type-pointOption" value="point">Mesures</nb-option>
+            </nb-option-group>
+          </nb-select>
+          <nb-select fullWidth *ngIf="render.detailsPeriod" id="details-period" placeholder="Période" [(selected)]="period" class="col-12 col-md-1 px-0">
+            <nb-option  *ngIf="render.detailsPeriod1min" id="comp-period-1min" value="1min"> 1 min </nb-option>
+            <nb-option  *ngIf="render.detailsPeriod5min && selectedInstallations?.type != 'io_impulse'" id="details-period-5min" value="5min"> 5 min </nb-option>
+            <nb-option  *ngIf="render.detailsPeriodHour" id="details-period-hour" value="Hours">{{'HISTORY.time.hour' | translate}} </nb-option>
+            <nb-option  *ngIf="render.detailsPeriodDay" id="details-period-day" value="Day"> {{'HISTORY.time.day' | translate}}  </nb-option>
+            <nb-option  *ngIf="render.detailsPeriodMonth" id="details-period-month" value="Month"> {{'HISTORY.time.month' | translate}}  </nb-option>
+          </nb-select> 
+          <nb-select fullWidth  *ngIf="render.detailsMeasure" id="details-measure" multiple [(selected)]="selectedGroups" (selectedChange)="chooseGroup($event)"
+            class=" col-12 col-md-1 px-0" placeholder="Select {{'HISTORY.measure' | translate}}">
+            <nb-option *ngFor="let group of getMesureContainer(vars[0])" [value]="group">
+              {{group.name?group.name:getPointName(group)}}</nb-option>
+              <nb-option *ngFor="let prov of getSubGeneral(selectedInstallations?.provider?.groupses)" [value]="prov">
+                {{prov.name | uppercase}}
+              </nb-option> 
+          </nb-select>
+          <nb-select fullWidth *ngIf="render.detailsMeasureSonde" id="details-measure-sonde" multiple [(selected)]="selectedGroups" (selectedChange)="chooseGroup($event)"
+            class=" col-12 col-md-1 px-0" placeholder="Sondes">
+            <nb-option *ngFor="let group of getMesureContainer(vars[0])" [value]="group">
+              {{group.name?group.name:getPointName(group)}}</nb-option>
+          </nb-select>
+          <nb-select fullWidth  *ngIf="render.detailsMeasureInput"  multiple [(selected)]="selectedMeasures"
+          (selectedChange)="chooseGroup($event)" placeholder="Inputs" class="pointer">
+          <nb-option-group *ngFor="let catName of getInputCategoriesName(selectedInstallations)" [title]="catName">
+             <nb-option *ngFor="let group of inputList(catName, selectedInstallations)" [value]="group">
+                      {{group.name?group.name:group.label}}</nb-option>
+               </nb-option-group>
+        </nb-select>
+          <input nbInput   placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="from" class="col-12 col-md-2" 
+           name="startDate" [formControl]="formControl2" (ngModelChange)="startDate=$event">
+          <nb-date-timepicker #from singleColumn [step]="5" style="display:none;"></nb-date-timepicker>
+          
+          <input nbInput  placeholder="{{'HISTORY.endDate' | translate}}" [nbDatepicker]="to" class="col-12 col-md-2"
+           name="endDate" [formControl]="formControl1" (ngModelChange)="endDate=$event">
+          <nb-date-timepicker #to singleColumn [step]="5" style="display:none;" ></nb-date-timepicker>
+          
+          <button type="submit" nbButton status="primary" size="small" class="col-12 col-md-1 px-0" [disabled]="!isAllValid()" (click)="refreshZone()">
+            <nb-icon icon="checkmark-square-2"></nb-icon>{{'HISTORY.validate' | translate}}</button>
+        </form>
+       </nb-accordion-item-body>
+      </nb-accordion-item>
+      </nb-accordion>
+    </nb-card>
+  </div>
+</div>
+
+<app-details-graph [groupIds]="groupIds" [groupses]="selectedGroups" [sondes]="selectedGroups" [points]="selectedGroups"
+    [stations]="selectedGroups" [vars]="vars" [startDate]="startDate" [endDate]="endDate" [period]="period"  [inputs]="inputs"
+    [lastUpdate]="lastUpdate" 
+    (onData)="collapseForm($event)">
+</app-details-graph>  

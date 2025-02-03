@@ -1,0 +1,275 @@
+<div *ngIf="owner != 'METOS'" class="row">
+  <div id="site-box">
+    <nb-card accent="primary">
+      <nb-card-header>Site</nb-card-header>
+      <nb-card-body >
+        <nb-select fullWidth status="primary" [(selected)]="selectedZone"
+          placeholder="Site" (selectedChange)="onZoneChange()" class="pointer">
+          <nb-option *ngFor="let zone of orderByName(zones)" [value]="zone">{{zone.name | uppercase }}</nb-option>
+        </nb-select>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div id="zone-box">
+    <nb-card accent="primary">
+      <nb-card-header>Zones</nb-card-header>
+      <nb-card-body >
+        <nb-select fullWidth status="primary" [(selected)]="selectedZone"
+          placeholder="Zone" (selectedChange)="onZoneChange()" class="pointer">
+          <nb-option *ngFor="let zone of orderByName(zones)" [value]="zone">{{zone.name | uppercase }}</nb-option>
+        </nb-select>
+      </nb-card-body>
+    </nb-card>
+  </div>
+    <div id="installation-box">
+      <nb-card accent="primary">
+        <nb-card-header>Installation</nb-card-header>
+        <nb-card-body >
+          <nb-select [ngClass]="{'disabled':selectedZone == null }"  fullWidth [status]="selectedZone == null? 'basic' : 'primary'" [(selected)]="selectedInstallation"
+            placeholder="Installation" (selectedChange)="onChangeInstallation($event)"  class="pointer">
+            <nb-option *ngFor="let installation of orderByName(installations)" [value]="installation">{{installation.name | uppercase }}</nb-option>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div id="chambre-box">
+      <nb-card accent="primary">
+        <nb-card-header>{{'HISTORY.chamber' | translate}}</nb-card-header>
+        <nb-card-body >
+          <nb-select fullWidth [status]="selectedZone == null? 'basic' : 'primary'" [(selected)]="selectedInstallation"
+            placeholder="{{'HISTORY.chamber' | translate}}" (selectedChange)="onChangeInstallation()" [ngClass]="{'disabled':installations.length == 0 }" class="pointer">
+            <nb-option *ngFor="let installation of orderByName(installations)" [value]="installation">{{installation.name | uppercase }}</nb-option>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div id="depot-box">
+      <nb-card accent="primary">
+        <nb-card-header>Depot</nb-card-header>
+        <nb-card-body >
+          <nb-select fullWidth [status]="selectedZone == null? 'basic' : 'primary'" [(selected)]="selectedInstallation"
+            placeholder="Depot" (selectedChange)="onChangeInstallation()" [ngClass]="{'disabled':installations.length == 0 }" class="pointer">
+            <nb-option *ngFor="let installation of orderByName(installations)" [value]="installation">{{installation.name | uppercase }}</nb-option>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div id="measure-type-box">
+      <nb-card accent="primary">
+        <nb-card-header> {{'ALERT.measureType' | translate}}</nb-card-header>
+        <nb-card-body [ngSwitch]="owner">
+          <nb-select *ngSwitchCase="'AZIZA'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)">
+            <!-- <nb-option value="DEVICE"> Equipement </nb-option> -->
+            <nb-option value="GROUP"> Group </nb-option>
+            <nb-option value="PHASE"> Phase </nb-option>
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'DEPOT'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)">
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'IOT'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+          [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)">
+          <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'INPUT'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+          [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)">
+          <nb-option value="INPUT"> Input</nb-option>
+        </nb-select>
+          <nb-select *ngSwitchCase="'FLEETDEPOT'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)">
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'MEKATECH'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+          [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)">
+          <nb-option value="SONDE"> Sonde</nb-option>
+        </nb-select>
+          <nb-select *ngSwitchDefault placeholder="{{'ALERT.measureType' | translate}}" [(selected)]="selectedMeasureType"
+            (selectedChange)="chooseMeasureType($event)" fullWidth status="primary">
+            <!-- <nb-option value="DEVICE"> Equipement </nb-option> -->
+            <nb-option *ngIf="selectedInstallation?.type != 'io_impulse'" value="GROUP"> Group </nb-option>
+            <nb-option *ngIf="selectedInstallation?.type != 'io_impulse'" value="PHASE"> Phase </nb-option>
+            <nb-option *ngFor="let ioType of getAllIoTypes(selectedInstallation)" [value]="'IO_'+ioType"> {{ioType}} </nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'MEKATECH'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)">
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div id="measure-box">
+      <nb-card id="measure-box-sonde" accent="primary">
+        <nb-card-header>Sondes</nb-card-header>
+        <nb-card-body>
+          <nb-select  [ngClass]="{'disabled':selectedInstallation == null }" fullWidth [status]="selectedInstallation == null? 'basic' : 'primary'" multiple [(selected)]="selectedMeasures"
+            (selectedChange)="chooseMeasure($event)" placeholder="Sondes" class="pointer">
+            <nb-option *ngFor="let group of getMeasureContainer(selectedMeasureType)" [value]="group">
+              {{group.name?group.name:group.label}}</nb-option>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+      <nb-card id="measure-box-measures" accent="primary">
+        <nb-card-header>{{'HISTORY.measure' | translate}}</nb-card-header>
+        <nb-card-body>
+          <nb-select  [ngClass]="{'disabled':selectedInstallation == null }" fullWidth [status]="selectedInstallation == null? 'basic' : 'primary'" multiple [(selected)]="selectedMeasures"
+            (selectedChange)="chooseMeasure($event)" placeholder="{{'HISTORY.measure' | translate}}" class="pointer">
+            <nb-option *ngFor="let group of getMeasureContainer(selectedMeasureType)" [value]="group">
+              {{group.name?group.name:group.label}}</nb-option>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+      <nb-card id="measure-box-input" accent="primary">
+        <nb-card-header>Inputs</nb-card-header>
+        <nb-card-body>
+          <nb-select  [ngClass]="{'disabled':selectedInstallation == null }" fullWidth [status]="selectedInstallation == null? 'basic' : 'primary'" multiple [(selected)]="selectedMeasures"
+            (selectedChange)="chooseMeasure($event)" placeholder="{{'HISTORY.measure' | translate}}" class="pointer">
+            <nb-option-group *ngFor="let catName of getInputCategoriesName(selectedInstallation)" [title]="catName">
+              <nb-option *ngFor="let group of inputList(catName, selectedInstallation)" [value]="group">
+                       {{group.name?group.name:group.label}}</nb-option>
+                </nb-option-group>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div id="alert-type-box">
+      <nb-card accent="primary">
+        <nb-card-header>{{'ALERT.alertType' | translate}}</nb-card-header>
+        <nb-card-body [ngSwitch]="owner">
+          <ng-container *ngSwitchCase="'FLEETDEPOT'">
+            <nb-select fullWidth status="primary" size="medium" placeholder="{{'ALERT.allType' | translate}}"
+             [(selected)]="type" (selectedChange)="onChangeAlertType($event)" class="pointer">
+              <nb-option [value]="{ lbl: 'Tout types', value: 'DISCONNECTION'}"> Sonde hors Ligne</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: 'TEMPERATURE_THRESHOLD'}"> Température</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: '' }">{{'ALERT.allType' | translate}}</nb-option>
+            </nb-select>
+          </ng-container>
+          <ng-container *ngSwitchCase="'MEKATECH'">
+            <nb-select fullWidth status="primary" size="medium" placeholder="{{'ALERT.allType' | translate}}"
+             [(selected)]="type" (selectedChange)="onChangeAlertType($event)" class="pointer">
+              <nb-option [value]="{ lbl: 'Tout types', value: 'DISCONNECTION'}"> Sonde hors Ligne</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: 'TEMPERATURE_THRESHOLD'}"> Température</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: '' }">{{'ALERT.allType' | translate}}</nb-option>
+            </nb-select>
+          </ng-container>
+          <ng-container *ngSwitchCase="'IOT'">
+            <nb-select fullWidth status="primary" size="medium" placeholder="{{'ALERT.allType' | translate}}"
+             [(selected)]="type" (selectedChange)="onChangeAlertType($event)" class="pointer">
+              <nb-option [value]="{ lbl: 'Tout types', value: 'DISCONNECTION'}"> Sonde hors Ligne</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: 'TEMPERATURE_THRESHOLD'}"> Température</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: '' }">{{'ALERT.allType' | translate}}</nb-option>
+            </nb-select>
+          </ng-container>
+          <ng-container *ngSwitchCase="'INPUT'">
+            <nb-select fullWidth status="primary" size="medium" placeholder="{{'ALERT.allType' | translate}}"
+             [(selected)]="type" (selectedChange)="onChangeAlertType($event)" class="pointer">
+              <nb-option [value]="{ lbl: 'Tout types', value: 'DISCONNECTION'}"> Hors Ligne</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: 'SIMPLE_VAL'}"> Valeur</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: '' }">{{'ALERT.allType' | translate}}</nb-option>
+            </nb-select>
+          </ng-container>
+        <ng-container *ngSwitchCase="'AZIZA'">
+          <nb-select [ngSwitch]="selectedMeasureType" fullWidth status="primary" size="medium" placeholder="{{'ALERT.allType' | translate}}"
+            [(selected)]="type" (selectedChange)="onChangeAlertType($event)" class="pointer">
+        
+              <nb-option [value]="{ lbl: 'Tout types', value: '' }">{{'ALERT.allType' | translate}}</nb-option>
+              <nb-option *ngSwitchCase="'GROUP'" [value]="{ lbl: 'Tout types', value: 'ENERGY' }">Energy</nb-option>
+              <nb-option *ngSwitchCase="'GROUP'" [value]="{ lbl: 'Tout types', value: 'DISCONNECTION' }">Group hors ligne</nb-option>
+              <!-- <nb-option *ngSwitchCase="'GROUP'" [value]="{ lbl: 'Tout types', value: 'DEPHASAGE' }">Equilibrage de phases</nb-option> -->
+
+              <nb-option *ngSwitchCase="'PHASE'" [value]="{ lbl: 'Tout types', value: 'AMPERAGE' }">Ampérage</nb-option>
+              <nb-option *ngSwitchCase="'PHASE'" [value]="{ lbl: 'Tout types', value: 'POWER' }">Puissance</nb-option>
+              <nb-option *ngSwitchCase="'PHASE'" [value]="{ lbl: 'Tout types', value: 'VOLTAGE' }">Voltage</nb-option>
+
+              <nb-option *ngSwitchCase="'SONDE'" [value]="{ lbl: 'Tout types', value: 'TEMPERATURE_THRESHOLD' }">Temperature</nb-option>
+              <nb-option *ngSwitchCase="'SONDE'" [value]="{ lbl: 'Tout types', value: 'DISCONNECTION' }">Sonde hors ligne</nb-option>
+            </nb-select>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <nb-select [ngSwitch]="selectedMeasureType" fullWidth status="primary" size="medium" placeholder="{{'ALERT.allType' | translate}}"
+            [(selected)]="type" (selectedChange)="onChangeAlertType($event)" class="pointer">
+        
+              <nb-option [value]="{ lbl: 'Tout types', value: '' }">{{'ALERT.allType' | translate}}</nb-option>
+
+              <nb-option *ngSwitchCase="'GROUP'" [value]="{ lbl: 'Tout types', value: 'ENERGY' }">Energy</nb-option>
+              <nb-option *ngSwitchCase="'GROUP'" [value]="{ lbl: 'Tout types', value: 'DISCONNECTION' }">Hors ligne</nb-option>
+              <!-- <nb-option *ngSwitchCase="'GROUP'" [value]="{ lbl: 'Tout types', value: 'DEPHASAGE' }">Equilibrage de phases</nb-option> -->
+
+              <nb-option *ngSwitchCase="'PHASE'" [value]="{ lbl: 'Tout types', value: 'AMPERAGE' }">Ampérage</nb-option>
+              <nb-option *ngSwitchCase="'PHASE'" [value]="{ lbl: 'Tout types', value: 'POWER' }">Puissance</nb-option>
+              <nb-option *ngSwitchCase="'PHASE'" [value]="{ lbl: 'Tout types', value: 'VOLTAGE' }">Voltage</nb-option>
+
+              <nb-option *ngIf="selectedMeasureType?.startsWith('IO_')" [value]="{ lbl: 'Tout types', value: 'DISCONNECTION' }">Hors ligne</nb-option>
+              <nb-option  *ngIf="selectedMeasureType?.startsWith('IO_')" [value]="{ lbl: 'Tout types', value: selectedMeasureType?.replace('IO_', '') }"> {{selectedMeasureType?.replace('IO_', '') }} </nb-option>
+
+            </nb-select>
+        </ng-container>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+  
+  <div *ngIf="owner == 'METOS'" class="row">
+    <div class="col-md-4">
+      <nb-card accent="primary">
+        <nb-card-header>{{'ALERT.stations' | translate}}</nb-card-header>
+        <nb-card-body>
+          <nb-select  fullWidth status="primary" multiple [(selected)]="selectedStations" (selectedChange)="onChangeStations($event)"
+            placeholder="{{'Select'}} {{'ALERT.stations' | translate}}" class="pointer">
+            <nb-option *ngFor="let station of orderByName(stations)" [value]="station">{{station.name | uppercase }}</nb-option>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-md-4">
+      <nb-card accent="primary">
+        <nb-card-header>{{'ALERT.sensors' | translate}}</nb-card-header>
+        <nb-card-body>
+          <nb-select fullWidth status="primary" multiple [(selected)]="selectedMeasures" (selectedChange)="chooseMeasure($event)"
+            placeholder="{{'Select'}} {{'ALERT.sensors' | translate}} " class="pointer">
+            <nb-option *ngFor="let group of getMeasureContainer(selectedMeasureType)" [value]="group">
+              {{group.name?group.name:group.label}}</nb-option>
+          </nb-select>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-md-4">
+      <nb-card accent="primary">
+        <nb-card-header>{{'ALERT.alertType' | translate}}</nb-card-header>
+        <nb-card-body>
+            <nb-select fullWidth status="primary" size="medium" placeholder="{{'ALERT.allType' | translate}}"
+             [(selected)]="type" (selectedChange)="onChangeAlertType($event)" class="pointer">
+              <nb-option [value]="{ lbl: 'Tout types', value: 'DISCONNECTION'}"> Hors Ligne</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: 'SIMPLE'}"> Valeur</nb-option>
+              <nb-option [value]="{ lbl: 'Tout types', value: '' }">{{'ALERT.allType' | translate}}</nb-option>
+            </nb-select>
+            </nb-card-body>
+      </nb-card>
+      </div>
+  </div>
+  
+    <nb-card accent="primary" class="solar-card  pr-0 list-card mb-0">
+      <nb-card-header class="d-flex justify-content-between align-items-center  pb-2 ">
+        <span class="d-flex align-items-end">
+          <nb-icon status="primary" class="mr-2" icon="alert-circle-outline"></nb-icon>
+          {{'ALERT.alertList' | translate}}
+        </span>
+        <div class="d-flex flex-row align-items-stretch">
+          <button nbButton status="primary" size="small" 
+          (click)="openDialogue()" [disabled]="zones.length<=0"
+            class="pointer ml-2 pr-2">
+            <fa-icon [icon]="faIcon.faPlus" class="mr-2"></fa-icon>
+            <span class="d-none d-md-flex"> {{'ALERT.addAlert' | translate}}</span></button>
+        </div>
+      </nb-card-header>
+      <nb-card-body class="pt-0 px-0" [nbSpinner]="alertService.loading" nbSpinnerStatus="primary" nbSpinnerSize="large" >
+        <nb-list *ngIf="alerts.length != 0" class="pb-0 mb-0 mr-2">
+          <nb-list-item *ngFor="let alert of alerts"
+           [ngClass]="{'threat':deleteId==alert.id && !closeAll}" class="pb-0 pb-md-3" >
+            <ngx-alert-details [alert]="alert" class="w-100"></ngx-alert-details>
+          </nb-list-item>
+        </nb-list>
+        <div *ngIf="alerts.length == 0 && selectedMeasures.length != 0" class="m-auto p-5"> {{'ALERT.noAlertMsg' | translate}}.</div>
+       </nb-card-body>
+    </nb-card>

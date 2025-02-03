@@ -1,0 +1,160 @@
+.value1 {
+    font-size: 3rem;
+    font-weight: nb-theme(font-weight-light);
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  .value2 {
+    font-size: 3rem;
+    font-weight: nb-theme(font-weight-light);
+    margin-top: 0.5rem;
+  }
+  @import "../../../../@theme/styles/themes";
+  @import "~@nebular/theme/styles/global/breakpoints";
+  @import "~bootstrap/scss/mixins/breakpoints";
+  
+  @include nb-install-component() {
+    nb-card-body {
+     overflow-y: hidden;
+     overflow-x: scroll;
+    }
+  
+    // nb-card{
+    //   font-size: 1.15rem !important;
+    //   color: black !important;
+    // }
+  
+     nb-card-header{
+       color:  inherit !important;
+     }
+  
+    .percentage {
+      background: none repeat scroll 0% 0%;
+    }
+  
+    .info {
+      //margin-left: 45%;
+      padding-top: 1rem;
+    }
+  
+    .value {
+      margin: 0;
+    }
+  
+    .details {
+      display: flex;
+      justify-content: space-around;
+  
+      .parameter {
+        display: flex;
+        flex-direction: column;
+       // text-align: center;
+       font-size: 2rem;
+  
+        .parameter-name {
+          font-family: nb-theme(font-main);
+          font-size: 1.5rem;
+          // font-weight: nb-theme(font-weight-bolder);
+        //  line-height: 2rem;
+          color: #2a2a2a;
+          text-align: left;
+        }
+  
+        .parameter-value {
+          font-family: nb-theme(font-secondary);
+          color: nb-theme(color-fg-heading);
+         // font-weight: nb-theme(font-weight-bolder);
+          font-size: 1.5rem;
+        }
+      }
+    }
+    .text-card-color nb-card-header {
+      color:var(--text-primary-color);
+    }
+  }
+  
+  .title {
+    text-align: right;
+  }
+  
+  .date {
+    text-align: right;
+  }
+  
+  .btn-group-full-width {
+    width: 90%;
+  }
+  
+  .shortcut {
+    font-size: xx-large !important;
+    color: grey !important;
+    cursor: pointer !important;
+      &:hover {
+        color: var(--text-primary-color) !important;
+      }
+  }
+
+  .pointer{
+    cursor: pointer !important;
+  }
+
+  @include nb-install-component() {
+    .summary-container {
+      display: flex;
+      flex-wrap: wrap;
+      flex: 1;
+      background-color: nb-theme(background-basic-color-2);
+      justify-content: space-between;
+      padding: 1.5rem 4rem 1rem;
+      border: 1px solid nb-theme(border-basic-color-3);
+      border-left: none;
+      border-right: none;
+    }
+  }
+  
+  .font-weight-520 {
+    font-weight: 520 !important;
+  }
+  
+  @include media-breakpoint-up(md) {
+    ::ng-deep nb-reveal-card a.reveal-button {
+      display: none !important;
+    }
+  }
+
+  ::ng-deep nb-reveal-card a.reveal-button {
+    margin-bottom: 0.5rem !important;
+    margin-right: 0.5rem !important;
+    padding: 0.5rem !important;
+    border-radius: 50% !important;
+    background-color: #edf1f7 !important;
+  }
+
+  nb-card-header .fa-play {
+    color: var(--text-primary-color) !important;
+  }
+
+  .w-30{
+    width: 30% !important;
+  } 
+  .h-30 {
+    height: 30% !important;
+  }
+
+  .details-card {
+    margin-left:-15% !important;
+  }
+
+  @include media-breakpoint-down(xs) {
+    .details-card {
+      margin-left:-30% !important;
+    }
+  }
+
+  .catCard nb-card nb-card-body {
+    overflow-x: hidden !important;
+}
+
+.ml-neg-10 {
+  margin-left: -10%;
+}

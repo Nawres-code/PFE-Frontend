@@ -1,0 +1,70 @@
+@import '../../../@theme/styles/themes';
+
+.pointer{
+    cursor: pointer !important;
+  }
+
+.status-on{
+    color:  rgb(46, 159, 61) !important;
+}
+
+.action-red:hover{
+    color: nb-theme(color-danger) !important;
+}
+
+.action-primary:hover{
+    color: nb-theme(color-primary) !important;
+}
+
+.cron-container{
+    color: #696969;
+    font-size: medium;
+}
+
+.bold-small{
+    font-weight: bold; 
+    font-size: small;
+}
+
+.large{
+    font-size: large;
+}
+
+.left-border{
+    border-left: 1px solid black;
+}
+
+nb-icon {
+    height: 25px !important;
+}
+
+.badge-energy {
+    color: #fff;
+    background-color:  rgb(124, 181, 236);
+}
+.badge-dephasage {
+    color: #fff;
+    background-color: #ff5722;
+}
+.badge-power {
+    color: #fff;
+    background-color: rgb(219, 145, 5);
+}
+.badge-amperage {
+    color: #fff;
+    background-color: #9c27b0;
+}
+.badge-voltage {
+    color: #fff;
+    background-color: rgb(0, 128, 0);
+}
+
+.zoneBox {
+display: none !important;
+} 
+.instBox{
+    display: inline !important;
+} 
+.measureBox{
+    display: inline !important;
+}

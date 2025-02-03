@@ -1,0 +1,41 @@
+<div class="row mb-3">
+    <div class="col-md-12">
+        <nb-card class="mb-0" accent="primary">
+            <nb-accordion accent="primary">
+                <nb-accordion-item class="inline-form-card" [expanded]="formExpanded">
+                    <nb-accordion-item-header> <nb-icon status="primary" icon="bar-chart"></nb-icon>
+                        <span class="ml-2">{{'HISTORY.sensor'| translate}}</span>
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>
+                        <form class="form-inline">
+
+                            <nb-select fullWidth id="energy-sensor" placeholder="Mesure"
+                                [(selected)]="selectedSensors" class="col-12 col-md-2 px-0"
+                                (selectedChange)="chooseSensor($event)">
+                                <nb-option *ngFor="let sensor of dataManagementService.sensors" [value]="sensor">
+                                    {{sensor.name | uppercase}}
+                                </nb-option>
+                            </nb-select>
+
+
+                            <input nbInput placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="from"
+                                class="col-12 col-md-2" name="startDate" [formControl]="formControl"
+                                (ngModelChange)="startDate=$event">
+                            <nb-date-timepicker #from singleColumn [step]="5"
+                                style="display:none;"></nb-date-timepicker>
+
+                            <input nbInput placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="to"
+                                class="col-12 col-md-2" name="endDate" [formControl]="formControl1"
+                                (ngModelChange)="endDate=$event">
+                            <nb-date-timepicker #to singleColumn [step]="5" style="display:none;"></nb-date-timepicker>
+
+                            <button type="submit" nbButton status="primary" size="small" class="col-12 col-md-1 px-0"
+                                (click)="refreshZone()">
+                                <nb-icon icon="checkmark-square-2"></nb-icon>{{'HISTORY.validate' | translate}}</button>
+                        </form>
+                    </nb-accordion-item-body>
+                </nb-accordion-item>
+            </nb-accordion>
+        </nb-card>
+    </div>
+</div>

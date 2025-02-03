@@ -1,0 +1,60 @@
+<nb-card *ngIf="owner!= 'MEKATECHNOAUTH'" id="search-card" class="col-12 tools-card">
+    <nb-card-body class="py-2 pr-1" style="overflow: hidden;">
+        <div class="row">
+            <div class="col-md-6 pl-0 my-2">
+                <nb-form-field class="">
+                    <input type="text" fullWidth [(ngModel)]="search.name" id="input-depot"
+                        placeholder="{{'DASH.searchDepot' | translate}}" nbInput>
+                    <input type="text" fullWidth [(ngModel)]="search.name" id="input-installation"
+                        placeholder="{{'DASH.searchInst' | translate}}" nbInput>
+                    <input type="text" fullWidth [(ngModel)]="search.name" id="input-chambre"
+                        placeholder="{{'DASH.searchChamber' | translate}}" nbInput>
+                    <button nbSuffix nbButton ghost>
+                        <nb-icon icon="search-outline" pack="eva"></nb-icon>
+                    </button>
+                </nb-form-field>
+            </div>
+            <div class="col-md-3 pl-0 my-2" *ngIf="dataManagementService.tenantData?.zones?.length > 1">
+                <button nbButton (click)="toggle()" class="w-100 px-1">
+                    <nb-icon status="primary" icon="collapse-outline"></nb-icon>Masquer tous les sites
+                </button>
+            </div>
+            <div class="col-md-3 offset-md-3 pt-md-2 my-2">
+                <nb-toggle status="basic" [checked]="graphService.showGraph"
+                    (checkedChange)="graphService.showGraphFunction()" class="float-right">
+                    <span *ngIf="!graphService.showGraph">{{ 'DASH.showGraph' | translate }}</span>
+                    <span *ngIf="graphService.showGraph">{{ 'DASH.hideGraph' | translate }}</span>
+                </nb-toggle>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>
+<div class="row" *ngIf="dataManagementService.tenantData?.zones?.length == 1">
+<ng-container *ngFor="let installation of  orderInstalltionByName(dataManagementService.tenantData?.zones[0]?.installations) | filterBy:search ">
+    <ngx-installation-card *ngIf="installation.enabled == true"
+        [installation]="installation"
+        [rtInstallation]="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.tenantData?.zones[0]?.idZone]?.installationsRtDto[installation.id]"
+        [ngClass]="{'col-lg-3': owner == 'MEKATECHNOAUTH', 'col-md-3': owner == 'MEKATECHNOAUTH', 'col-sm-12': owner == 'MEKATECHNOAUTH', 'mb-2': owner == 'MEKATECHNOAUTH',
+    'col-lg-6': owner != 'MEKATECHNOAUTH', 'col-md-6': owner != 'MEKATECHNOAUTH', 'col-sm-12': owner != 'MEKATECHNOAUTH', 'mb-4': owner != 'MEKATECHNOAUTH'}">
+    </ngx-installation-card>
+</ng-container>
+</div>
+<nb-accordion multi *ngIf="dataManagementService.tenantData?.zones?.length > 1">
+    <nb-accordion-item class="mb-3" *ngFor="let zone of orderByName(dataManagementService.tenantData.zones)"
+        expanded="false" #item>
+        <nb-accordion-item-header status="primary">
+            <nb-icon status="primary" icon="cube-outline"></nb-icon>
+            <span class="ml-2">{{zone.name}}</span>
+        </nb-accordion-item-header>
+        <nb-accordion-item-body>
+            <div class="row">
+                <ngx-installation-card
+                    *ngFor="let installation of orderInstalltionByName(zone.installations) | filterBy:search "
+                    [installation]="installation"
+                    [rtInstallation]="dataManagementService.dataRtDto.zonesRtDto[zone.idZone]?.installationsRtDto[installation.id]"
+                    class="col-lg-6 col-md-6 col-sm-12">
+                </ngx-installation-card>
+            </div>
+        </nb-accordion-item-body>
+    </nb-accordion-item>
+</nb-accordion>

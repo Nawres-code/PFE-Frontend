@@ -1,0 +1,13 @@
+  <nb-card class="" accent="primary">
+    <nb-card-header> <nb-icon status="primary" icon="settings-outline"></nb-icon>
+      <span class="ml-2" id="group-span"> {{'GROUP.groupTitle' | translate}} </span>
+
+    </nb-card-header>
+  <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+    <ng2-smart-table *ngIf="settings!= null"
+     [settings]="settings" 
+     [source]="source" 
+     (editConfirm)="onEditConfirm($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>

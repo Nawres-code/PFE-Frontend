@@ -1,0 +1,34 @@
+<div class="d-flex flex-row justify-content-center px-2" >
+  <!-- <ng-container *ngFor="let inpt of inputs | orderBy : 'name'"> -->
+    <ng-container *ngFor="let inpt of orderInputsByName()">
+    <div *ngIf="inpt.name == 'heat'" class="py-2 flex-fill mr-2 input-icon " title="Heat" 
+    [ngClass]="{selected:select.heat, 'd-none':noRender('heat')
+    , activated: (dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[installationId]?.inputsRtDto[inpt.id]?.lastValue)==1}"
+    (click)="onToggleSelected('heat', inpt.id)">
+    <fa-icon [icon]="faIcon.faFire"></fa-icon>
+    </div>
+    <div *ngIf="inpt.name == 'fan'" class="py-2 flex-fill mr-2 input-icon" title="Fan" 
+    [ngClass]="{selected:select.fan, 'd-none':noRender('fan')
+    , activated: (dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[installationId]?.inputsRtDto[inpt.id]?.lastValue)==1}"
+    (click)="onToggleSelected('fan', inpt.id)">
+    <fa-icon [icon]="faIcon.faFan"></fa-icon>
+    </div>
+    <div *ngIf="inpt.name == 'cool'" class="py-2 flex-fill mr-2 input-icon" title="Cool" 
+    [ngClass]="{selected:select.cool, 'd-none':noRender('cool')
+    , activated: (dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[installationId]?.inputsRtDto[inpt.id]?.lastValue)==1}"
+    (click)="onToggleSelected('cool', inpt.id)">
+    <fa-icon [icon]="faIcon.faSnowflake"></fa-icon>
+    </div>
+    <div *ngIf="inpt.name == 'door'" class="py-2 flex-fill mr-2 d-none input-icon" title="Door"
+    [ngClass]="{selected:select.door, activated:true
+      , 'd-none': isDoorState(installationId,inpt.id,0)
+      }" (click)="onToggleSelected('door', inpt.id)">
+      <fa-icon [icon]="faIcon.faDoorOpen"></fa-icon>
+    </div>
+    <div *ngIf="inpt.name == 'door'" class="py-2 flex-fill mr-2 input-icon" title="Door" 
+    [ngClass]="{selected:select.door, activated:true
+      , 'd-none':  isDoorState(installationId,inpt.id,1) }" (click)="onToggleSelected('door', inpt.id)">
+      <fa-icon [icon]="faIcon.faDoorClosed"></fa-icon>
+    </div>
+</ng-container>
+</div> 

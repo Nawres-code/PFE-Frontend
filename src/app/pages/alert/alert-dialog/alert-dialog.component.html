@@ -1,0 +1,326 @@
+<nb-card accent="primary" class="main-card">
+  <nb-card-header class="row">
+    <div class="col-10 pt-2">
+      <nb-icon status="primary" icon="settings-2-outline"></nb-icon><span class="ml-2">{{'ALERT.setting' | translate}}</span>
+    </div>
+    <div class="col-2"> 
+      <button nbButton ghost status="danger" class="float-right"  (click)="onClose()" tabindex="10">
+        <nb-icon icon="close-outline"></nb-icon>
+      </button>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <form class="px-3 pt-3 pb-5">
+      <div class="form-group row" *ngIf="render.siteBox">
+        <label for="inputZone" class="label col-2 col-form-label"  tabindex="0">Site</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary" placeholder="Site" [(selected)]="selectedZone"
+            (selectedChange)="onZoneChange($event)" id="inputZone" [disabled]="alert.id!=0" >
+            <nb-option *ngFor="let z of orderByName(dataManagementService.tenantData.zones)" [value]="z">{{z.name | uppercase }}
+            </nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.zoneBox">
+        <label for="inputZone" class="label col-2 col-form-label"  tabindex="0">Zone</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary" placeholder="Zone" [(selected)]="selectedZone"
+            (selectedChange)="onZoneChange($event)" id="inputZone" [disabled]="alert.id!=0" >
+            <nb-option *ngFor="let z of orderByName(dataManagementService.tenantData.zones)" [value]="z">{{z.name | uppercase }}
+            </nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.chamberBox">
+        <label for="inputInstallation" class="label col-2 col-form-label">{{'HISTORY.chamber' | translate}}</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary" placeholder="{{'HISTORY.chamber' | translate}}" [(selected)]="selectedInstallation"
+            (selectedChange)="onChangeInstallation($event)" id="inputInstallation" [disabled]="alert.id!=0">
+            <nb-option *ngFor="let installation of orderByName(installations)" [value]="installation">{{installation.name | uppercase }}
+            </nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.depotBox">
+        <label for="inputInstallation" class="label col-2 col-form-label">Depot</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary" placeholder="Depot" [(selected)]="selectedInstallation"
+            (selectedChange)="onChangeInstallation($event)" id="inputInstallation" [disabled]="alert.id!=0">
+            <nb-option *ngFor="let installation of orderByName(installations)" [value]="installation">{{installation.name | uppercase }}
+            </nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.installationBox">
+        <label for="inputInstallation" class="label col-2 col-form-label">Installation</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary" placeholder="installation" [(selected)]="selectedInstallation"
+            (selectedChange)="onChangeInstallation($event)" id="inputInstallation" [disabled]="alert.id!=0">
+            <nb-option *ngFor="let installation of orderByName(installations)" [value]="installation">{{installation.name | uppercase }}
+            </nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.measureTypeBox">
+        <label for="inputTypeMesure" class="label col-2 col-form-label">{{'ALERT.measureType' | translate}}</label>
+        <div class="col-10" [ngSwitch]="owner">
+          <nb-select *ngSwitchCase="'AZIZA'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)">
+            <!-- <nb-option value="DEVICE"> Equipement </nb-option> -->
+            <nb-option value="GROUP"> Group </nb-option>
+            <nb-option value="PHASE"> Phase </nb-option>
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'DEPOT'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)" id="inputTypeMesure"
+            [disabled]="alert.id!=0" >
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'IOT'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)" id="inputTypeMesure">
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'INPUT'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)" id="inputTypeMesure">
+            <nb-option value="INPUT"> Input</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'FLEETDEPOT'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)" id="inputTypeMesure">
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchCase="'MEKATECH'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)" id="inputTypeMesure">
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+          <nb-select *ngSwitchDefault placeholder="{{'ALERT.measureType' | translate}}" [(selected)]="selectedMeasureType"
+            (selectedChange)="chooseMeasureType($event)" fullWidth status="primary" id="inputTypeMesure"  [disabled]="alert.id!=0">
+            <!-- <nb-option value="DEVICE"> Equipement </nb-option> -->
+            <nb-option *ngIf="selectedInstallation?.type != 'io_impulse'" value="GROUP"> Group </nb-option>
+            <nb-option *ngIf="selectedInstallation?.type != 'io_impulse'" value="PHASE"> Phase </nb-option>
+            <nb-option *ngFor="let ioType of getAllIoTypes(selectedInstallation)" [value]="'IO_'+ioType"> {{ioType}} </nb-option>
+
+          </nb-select>
+          <nb-select *ngSwitchCase="'MEKATECH'" fullWidth status="primary" placeholder="{{'ALERT.measureType' | translate}}"
+            [(selected)]="selectedMeasureType" (selectedChange)="chooseMeasureType($event)" id="inputTypeMesure">
+            <nb-option value="SONDE"> Sonde</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.stationBox">
+        <label for="inputStation" class="label col-2 col-form-label">{{'ALERT.stations' | translate}}</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary" placeholder="{{'ALERT.stations' | translate}}" multiple [disabled]="alert.id!=0"
+            [(selected)]="selectedStations" (selectedChange)="onChangeStations($event)" id="inputStation">
+            <nb-option *ngFor="let station of orderByName(selectedInstallation?.stations)" [value]="station">{{station.name | uppercase }}
+            </nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.measureSondeBox">
+        <label class="label col-2 col-form-label">Sondes</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary"  multiple [(selected)]="selectedMeasures"
+            (selectedChange)="chooseMeasure($event)" placeholder="Select sondes" [disabled]="alert.id!=0">
+            <nb-option *ngFor="let group of getMeasureContainer(selectedMeasureType)" [value]="group">
+              {{group.name?group.name:group.label}}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.measureInputBox">
+        <label  class="label col-2 col-form-label">Inputs</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary" multiple [(selected)]="selectedMeasures"
+            (selectedChange)="chooseMeasure($event)" placeholder="Inputs" class="pointer" [disabled]="alert.id!=0">
+            <nb-option-group *ngFor="let catName of getInputCategoriesName(selectedInstallation)" [title]="catName">
+              <nb-option *ngFor="let group of inputList(catName, selectedInstallation)" [value]="group">
+                       {{group.name?group.name:group.label}}</nb-option>
+                </nb-option-group>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.measureSensorBox">
+        <label  class="label col-2 col-form-label">{{'ALERT.sensors' | translate}}</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary" multiple [(selected)]="selectedMeasures"
+            (selectedChange)="chooseMeasure($event)" placeholder="{{'ALERT.sensors' | translate}}" class="pointer" [disabled]="alert.id!=0">
+               <nb-option *ngFor="let group of getMeasureContainer(selectedMeasureType)" [value]="group">
+              {{group.name?group.name:group.label}}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="render.measureBox">
+        <label for="inputStation" class="label col-2 col-form-label">{{'HISTORY.measure' | translate}}</label>
+        <div class="col-10">
+          <nb-select fullWidth status="primary"  multiple [(selected)]="selectedMeasures"
+            (selectedChange)="chooseMeasure($event)" placeholder="Select {{'HISTORY.measure' | translate}}" [disabled]="alert.id!=0">
+            <nb-option *ngFor="let group of getMeasureContainer(selectedMeasureType)" [value]="group">
+              {{group.name?group.name:group.label}}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+
+      <div class="form-group row" *ngIf="render.alertTypeBox">
+        <label for="inputType" class="label col-2 col-form-label">{{'ALERT.alertType' | translate}}</label>
+        <div class="col-10" [ngSwitch]="owner" >
+          <nb-select  *ngSwitchCase="'INPUT'" fullWidth status="primary" size="medium" placeholder="{{'ALERT.alertType' | translate}}" 
+          [(selected)]="alert.type" (selectedChange)="onChangeAlertType()" id="iputType" [disabled]="alert.id!=0">
+           <nb-option value="DISCONNECTION"> Hors Ligne</nb-option>
+           <nb-option value="SIMPLE_VAL"> Valeur</nb-option>
+         </nb-select>
+          <nb-select  *ngSwitchCase="'FLEETDEPOT'" fullWidth status="primary" size="medium" placeholder="{{'ALERT.alertType' | translate}}" 
+          [(selected)]="alert.type" (selectedChange)="onChangeAlertType()" id="iputType" [disabled]="alert.id!=0">
+          <nb-option value="DISCONNECTION"> Sonde hors Ligne</nb-option>
+          <nb-option value="TEMPERATURE_THRESHOLD"> Température</nb-option>
+           <!-- <nb-option *ngFor="let t of getPossibleTypes()" [value]="t.value"> {{t.lbl}} </nb-option>  -->
+          </nb-select>
+          <nb-select  *ngSwitchCase="'MEKATECH'" fullWidth status="primary" size="medium" placeholder="{{'ALERT.alertType' | translate}}" 
+          [(selected)]="alert.type" (selectedChange)="onChangeAlertType()" id="iputType" [disabled]="alert.id!=0">
+          <nb-option value="DISCONNECTION"> Sonde hors Ligne</nb-option>
+          <nb-option value="TEMPERATURE_THRESHOLD"> Température</nb-option>
+           <!-- <nb-option *ngFor="let t of getPossibleTypes()" [value]="t.value"> {{t.lbl}} </nb-option>  -->
+          </nb-select>
+          <nb-select  *ngSwitchCase="'IOT'" fullWidth status="primary" size="medium" placeholder="{{'ALERT.alertType' | translate}}" 
+          [(selected)]="alert.type" (selectedChange)="onChangeAlertType()" id="iputType" [disabled]="alert.id!=0">
+          <nb-option value="DISCONNECTION"> Sonde hors Ligne</nb-option>
+          <nb-option value="TEMPERATURE_THRESHOLD"> Température</nb-option>
+           <!-- <nb-option *ngFor="let t of getPossibleTypes()" [value]="t.value"> {{t.lbl}} </nb-option>  -->
+          </nb-select>
+          <nb-select  *ngSwitchCase="'DEPOT'" fullWidth status="primary" size="medium" placeholder="{{'ALERT.alertType' | translate}}" 
+          [(selected)]="alert.type" (selectedChange)="onChangeAlertType()" id="iputType" [disabled]="alert.id!=0">
+          <nb-option value="DISCONNECTION"> Sonde hors Ligne</nb-option>
+          <nb-option value="TEMPERATURE_THRESHOLD"> Température</nb-option>
+           <!-- <nb-option *ngFor="let t of getPossibleTypes()" [value]="t.value"> {{t.lbl}} </nb-option>  -->
+          </nb-select>
+          <ng-container *ngSwitchDefault >
+          <nb-select [ngSwitch]="selectedMeasureType" fullWidth status="primary" size="medium" placeholder="{{'ALERT.alertType' | translate}}" 
+          [(selected)]="alert.type" (selectedChange)="onChangeAlertType()" id="iputType" [disabled]="alert.id!=0">
+            
+            <nb-option *ngSwitchCase="'GROUP'" value="ENERGY"> Energy </nb-option>
+            <nb-option *ngSwitchCase="'GROUP'" value="DISCONNECTION"> Group hors ligne</nb-option>
+            <!-- <nb-option *ngSwitchCase="'GROUP'" value="DEPHASAGE"> Equilibrage de phases </nb-option> -->
+
+            <nb-option *ngSwitchCase="'PHASE'" value="AMPERAGE"> Ampérage </nb-option>
+            <nb-option *ngSwitchCase="'PHASE'" value="POWER"> Puissance </nb-option>
+            <nb-option *ngSwitchCase="'PHASE'" value="VOLTAGE"> Voltage </nb-option>
+
+            <nb-option *ngIf="selectedMeasureType?.startsWith('IO_')" value="DISCONNECTION">Hors ligne</nb-option>
+            <nb-option *ngIf="selectedMeasureType?.startsWith('IO_')"  [value]="selectedMeasureType?.replace('IO_', '')"> {{selectedMeasureType?.replace('IO_', '')}} </nb-option>
+          </nb-select>
+        </ng-container>
+        <ng-container *ngSwitchCase="'AZIZA'" >
+          <nb-select [ngSwitch]="selectedMeasureType" fullWidth status="primary" size="medium" placeholder="{{'ALERT.alertType' | translate}}" 
+          [(selected)]="alert.type" (selectedChange)="onChangeAlertType()" id="iputType" [disabled]="alert.id!=0">
+            <nb-option *ngSwitchCase="'GROUP'" value="ENERGY"> Energy </nb-option>
+            <nb-option *ngSwitchCase="'GROUP'" value="DISCONNECTION"> Hors ligne</nb-option>
+            <nb-option *ngSwitchCase="'GROUP'" value="DEPHASAGE"> Equilibrage de phases </nb-option>
+
+            <nb-option *ngSwitchCase="'PHASE'" value="AMPERAGE"> Ampérage </nb-option>
+            <nb-option *ngSwitchCase="'PHASE'" value="POWER"> Puissance </nb-option>
+            <nb-option *ngSwitchCase="'PHASE'" value="VOLTAGE"> Voltage </nb-option>
+
+            <nb-option *ngSwitchCase="'SONDE'" value="TEMPERATURE_THRESHOLD"> Température</nb-option>
+            <nb-option *ngSwitchCase="'SONDE'" value="DISCONNECTION"> Sonde hors ligne</nb-option>
+          </nb-select>
+        </ng-container>
+        <nb-select  *ngSwitchCase="'METOS'" fullWidth status="primary" size="medium" placeholder="{{'ALERT.alertType' | translate}}" 
+        [(selected)]="alert.type" (selectedChange)="onChangeAlertType()" id="iputType" [disabled]="alert.id!=0">
+         <nb-option value="DISCONNECTION"> Hors Ligne</nb-option>
+         <nb-option value="SIMPLE"> Valeur</nb-option>
+       </nb-select>
+        </div>
+      </div>
+    <div *ngIf="next && owner != 'METOS'" [ngSwitch]="alert?.type">
+     <ng-container *ngIf="owner == 'AZIZA'">
+          <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'TEMPERATURE_THRESHOLD'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'Min threshold'" [placeholderValue2]="'Max threshold'"  [showTimeLimits]="true" [hideCustomTime]="true" >
+        </ngx-alert-form>
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'SIMPLE'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'Min value'" [placeholderValue2]="'Max value'"  [showTimeLimits]="true" [hideCustomTime]="true"  >
+       </ngx-alert-form>
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'SIMPLE_VAL'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'Value'" [maxValue]="1" [minValue]="0"  [showTimeLimits]="true" [hideCustomTime]="true"  >
+       </ngx-alert-form>
+
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'AMPERAGE'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'Min value'" [placeholderValue2]="'Max value'" [maxValue]="300" [minValue]="0"  [showTimeLimits]="true" [hideCustomTime]="true" >
+       </ngx-alert-form>
+
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'POWER'" [alert]="alert" [cron]="cron"
+       [placeholderValue1]="'Min value'" [placeholderValue2]="'Max value'" [maxValue]="300" [minValue]="0"  [showTimeLimits]="true" [hideCustomTime]="true"  >
+       </ngx-alert-form>
+
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'VOLTAGE'" [alert]="alert" [cron]="cron"
+       [placeholderValue1]="'Min value'" [placeholderValue2]="'Max value'" [maxValue]="300" [minValue]="0"  [showTimeLimits]="true" [hideCustomTime]="true" >
+       </ngx-alert-form>
+
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'DEPHASAGE'" [alert]="alert" [cron]="cron"
+       [placeholderValue1]="'Value'" [maxValue]="100" [minValue]="5" [valueStep]="5"  [showTimeLimits]="true" [hideCustomTime]="true" ></ngx-alert-form>
+
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'VARIATION'" [alert]="alert" [cron]="cron"
+           [maxValue]="100" [minValue]="5" [valueStep]="5"  [showTimeLimits]="true" [hideCustomTime]="true"  ></ngx-alert-form>
+
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'DISCONNECTION'" [alert]="alert" [cron]="cron"  [showTimeLimits]="true" [hideCustomTime]="true" >
+        </ngx-alert-form>
+
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'ENERGY'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'Min value'"  [placeholderValue2]="'Max value'"  
+          [showTimeLimits]="true" [hideCustomTime]="true" ></ngx-alert-form>
+      </ng-container>
+      <ng-container *ngIf="owner != 'AZIZA'">
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'TEMPERATURE_THRESHOLD'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'Min threshold'" [placeholderValue2]="'Max threshold'" [showTimeLimits]="false" [hideCustomTime]="false"  >
+        </ngx-alert-form>
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'SIMPLE'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'value'" [placeholderValue2]="'value'" [showTimeLimits]="false" [hideCustomTime]="false">
+       </ngx-alert-form>
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'SIMPLE_VAL'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'Value'" [maxValue]="1" [minValue]="0" [showTimeLimits]="false" [hideCustomTime]="false" >
+       </ngx-alert-form>
+
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'AMPERAGE'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'value'" [placeholderValue2]="'value'" [maxValue]="300" [minValue]="0" [showTimeLimits]="false" [hideCustomTime]="false" >
+       </ngx-alert-form>
+
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'POWER'" [alert]="alert" [cron]="cron"
+       [placeholderValue1]="'value'" [placeholderValue2]="'value'" [maxValue]="300" [minValue]="0" [showTimeLimits]="false" [hideCustomTime]="false">
+       </ngx-alert-form>
+
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'VOLTAGE'" [alert]="alert" [cron]="cron"
+       [placeholderValue1]="'value'" [placeholderValue2]="'value'" [maxValue]="300" [minValue]="0" [showTimeLimits]="false" [hideCustomTime]="false">
+       </ngx-alert-form>
+
+       <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'DEPHASAGE'" [alert]="alert" [cron]="cron"
+       [placeholderValue1]="'Value'" [maxValue]="100" [minValue]="5" [valueStep]="5" [showTimeLimits]="false" [hideCustomTime]="false" ></ngx-alert-form>
+
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'VARIATION'" [alert]="alert" [cron]="cron"
+           [maxValue]="100" [minValue]="5" [valueStep]="5" [showTimeLimits]="false" [hideCustomTime]="false" ></ngx-alert-form>
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'DISCONNECTION'" [alert]="alert" [cron]="cron" [showTimeLimits]="false" [hideCustomTime]="false" >
+        </ngx-alert-form>
+
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'ENERGY'" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'value'"  [placeholderValue2]="'value'" [showTimeLimits]="false" [hideCustomTime]="false"></ngx-alert-form>
+
+          <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="selectedMeasureType?.replace('IO_', '')" [alert]="alert" [cron]="cron"
+          [placeholderValue1]="'value'"  [placeholderValue2]="'value'" [showTimeLimits]="false" [hideCustomTime]="false"></ngx-alert-form>
+        </ng-container>
+    </div>
+    <div *ngIf="owner=='METOS'">
+      <ng-container [ngSwitch]="alert?.type" >
+        <ngx-alert-form *ngSwitchCase="'SIMPLE'"  [measureIds]="measureIds" [alert]="alert" [cron]="cron" [showTimeLimits]="false"
+          [hideCustomTime]="false" [placeholderValue1]="'Min value'" [placeholderValue2]="'Max value'"
+          [stationIds]="stationIds" >
+        </ngx-alert-form>
+        <ngx-alert-form [measureIds]="measureIds" *ngSwitchCase="'DISCONNECTION'" 
+        [alert]="alert" [cron]="cron" [showTimeLimits]="false" [hideCustomTime]="false" 
+        [stationIds]="stationIds" >
+        </ngx-alert-form>
+    </ng-container>
+    </div>
+    <button *ngIf="!next && alert.type != null && alert.id==0" nbButton status="primary" size="medium"
+      class="pointer float-right" [disabled]="alert.type == null" (click)="onNext()">
+      <fa-icon [icon]="faIcon.faArrowCircleRight" class=" mr-2"></fa-icon>   
+    <span class="d-none d-md-flex">{{'ALERT.next' | translate}}</span>
+    </button>
+    </form>
+  </nb-card-body>
+</nb-card>

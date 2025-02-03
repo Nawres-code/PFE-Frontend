@@ -1,0 +1,48 @@
+<nb-card accent="primary" class=" mb-0 h-100">
+    <nb-card-header class=" d-flex flex-row justify-content-between px-4 py-3">
+        <span class="align-self-center">{{ installation.name | uppercase }}</span>
+        <ng-container [ngSwitch]="owner">
+            <!-- <i *ngSwitchCase="'FLEETDEPOT'" class="nb-bar-chart shortcut" title="Historique" (click)="onDetails(installation, 'Hours')"></i> -->
+            <div *ngSwitchCase="'MEKATECHNOAUTH'"></div>
+            <i *ngSwitchDefault class="nb-bar-chart shortcut" title="Historique" (click)="onComparator(installation, 'Hours')"></i>
+        </ng-container>
+        </nb-card-header>
+<nb-card-footer class="pr-0" style="display:inline-flex;">
+        <div class="col-10 row pl-0">
+                <label  *ngFor="let s of installation.sondes; odd as isOdd" class="col-6 value-info">
+                    <span class="subtitle"> {{s.name | uppercase}}</span>
+                    <div>
+                        <span class="caption description border-left border-hint  px-1">
+                            <nb-icon icon="thermometer-outline" pack="eva"></nb-icon>
+                            {{getSondeTemperature(s,installation.id)}}
+                        </span>
+                        <span *ngIf="s.configuration.indexOf('humidity')>-1"
+                             class="caption description border-left border-hint  px-1">
+                            <nb-icon icon="droplet-outline" pack="eva"></nb-icon>
+                            {{getSondeHumidity(s,installation.id)}}
+                        </span>
+                        <span *ngIf="s.configuration.indexOf('battery')>-1"
+                            class="caption description border-left border-hint  px-1">
+                            <nb-icon icon="battery-outline" pack="eva"></nb-icon>
+                            {{getSondeBattery(s,installation.id)}}
+                        </span>
+                    </div> 
+                </label>
+        </div>
+        <div class="col-2 px-0" >
+            <label class="float-right"
+            [ngStyle]="{'color': getDateDiffColor(getInstallationLastTime(installation))}"
+            style="font-size: 1.3rem;">
+            {{getDateDiff(getInstallationLastTime(installation))}}
+        </label>
+        </div> 
+</nb-card-footer>
+    <nb-card-body  class="pb-0" *ngIf="graphService.showGraph">
+        <div *ngIf="installation.type == 'depot'">
+            <gps-graph [idDiv]="installation.id" [sondes]="installation.sondes"
+            [vars]="['temperature']" [startDate]="startDate" [endDate]="endDate" 
+            [inputs]="installation.inputs" [inst-name]="installation.name"  [renderInputBar]="installation.inputs?.length>0">
+            </gps-graph>
+        </div>
+    </nb-card-body>
+</nb-card>

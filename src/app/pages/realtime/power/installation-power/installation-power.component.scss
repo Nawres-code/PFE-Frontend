@@ -1,0 +1,183 @@
+@import '../../../../@theme/styles/themes';
+@import '~@nebular/theme/styles/global/breakpoints';
+@import '~bootstrap/scss/mixins/breakpoints';
+
+@include nb-install-component() {
+
+  nb-card-body {
+    overflow: hidden;
+  }
+  nb-card-header{
+    color:  #32CD32;
+  }
+
+  .echart {
+    position: absolute;
+    left: 1em;
+    height: calc(100% - 2 * 1rem);
+    width: 40%;
+  }
+
+  .info {
+    //margin-left: 45%;
+    padding-top: 1rem;
+  }
+
+  .value {
+    margin: 0;
+  }
+
+  .details {
+    color: nb-theme(text-hint-color);
+  }
+}
+
+
+.slider-value-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .value {
+    position: relative;
+    color: nb-theme(color-fg-heading);
+    font-family: nb-theme(font-secondary);
+    font-size: rem;
+    font-weight: nb-theme(font-weight-bolder);
+
+    &.temperature::before {
+      position: absolute;
+      content: '°';
+      top: 0;
+      right: -1.25rem;
+    }
+
+    &.humidity::before {
+      position: absolute;
+      content: '%';
+      bottom: 0.5rem;
+      right: -2.5rem;
+      color: nb-theme(color-fg);
+      font-size: 2.5rem;
+      font-weight: nb-theme(font-weight-light);
+    }
+  }
+
+  .desc {
+    color: nb-theme(color-fg);
+    font-weight: nb-theme(font-weight-light);
+  }
+
+  &.off {
+    .value {
+      color: nb-theme(color-fg);
+      letter-spacing: 0.25rem;
+      padding-left: 0.5rem;
+
+      &::before {
+        display: none;
+      }
+    }
+
+    .desc {
+      display: none;
+    }
+  }
+}
+.value1 {
+  font-size: 3rem;
+  font-weight: nb-theme(font-weight-light);
+  margin-top: 50px;
+  text-align: center;
+}
+.summary-container {
+  display: flex;
+  flex: 1;
+  background-color: nb-theme(chart-panel-summary-background-color);
+  box-shadow: nb-theme(chart-panel-summary-box-shadow);
+  justify-content: space-between;
+  padding: 1.5rem 4rem 1rem;
+  margin-bottom: 1rem;
+  border:
+    nb-theme(chart-panel-summary-border-width)
+    solid
+    nb-theme(chart-panel-summary-border-color);
+  border-left: none;
+  border-right: none;
+}
+
+.value {
+  font-size: 2rem;
+  color: nb-theme(color-fg-heading);
+  text-align: center;
+}
+
+.title{
+  text-align: center;
+}
+@include media-breakpoint-down(sm) {
+  .value, .title {
+    font-weight: nb-theme(font-weight-bold);
+  }
+
+  .title {
+    font-size: nb-theme(font-size-sm);
+  }
+
+  .value {
+    font-size: nb-theme(font-size-xlg);
+  }
+}
+
+@include media-breakpoint-down(is) {
+  .summary-container {
+    padding-left: nb-theme(padding);
+    padding-right: nb-theme(padding);
+  }
+
+  .value {
+    margin-top: 0.5rem;
+  }
+}
+
+
+.details {
+  display: flex;
+  justify-content: space-around;
+
+  .parameter {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    .parameter-name {
+      font-family: nb-theme(font-main);
+      font-size: 1.25rem;
+      font-weight: nb-theme(font-weight-light);
+      line-height: 2rem;
+    }
+
+    .parameter-value {
+      font-family: nb-theme(font-secondary);
+      color: nb-theme(color-fg-heading);
+      font-weight: nb-theme(font-weight-bolder);
+    }
+  }
+}
+.title{
+  text-align: right;
+}
+
+.date{
+  text-align: center;
+}
+
+.title1{
+  text-align: center;
+}
+
+.valueA {
+  font-size: 2rem;
+  color: nb-theme(color-fg-heading);
+  text-align: center;
+}

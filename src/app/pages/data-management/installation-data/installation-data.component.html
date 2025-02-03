@@ -1,0 +1,23 @@
+<nb-card class="" accent="primary">
+  <nb-card-header>
+    <nb-icon status="primary" icon="settings-outline"></nb-icon>
+    <ng-container *ngIf="owner != 'CDC'">
+      <span class="ml-2" id="depot-span"> Gestion de depots</span>
+      <span class="ml-2" id="installation-span"> Gestion d'installations</span>
+      <span class="ml-2" id="chambre-span"> Gestion de chambres</span>
+    </ng-container>
+
+    <ng-container *ngIf="owner == 'CDC'">
+      <span class="ml-2" id="depot-span"> Gestion de Lignes</span>
+    </ng-container>
+
+  </nb-card-header>
+  <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+    <ng2-smart-table [settings]="settings" [source]="source" (editConfirm)="onEditConfirm($event)"
+      (createConfirm)="onCreateConfirm($event)"></ng2-smart-table>
+    <!-- (deleteConfirm)="onDeleteConfirm($event)"
+
+   >
+    </ng2-smart-table> -->
+  </nb-card-body>
+</nb-card>

@@ -1,0 +1,23 @@
+
+.form-inline [fullWidth] {
+  flex: 1;
+}
+
+.form-inline > * {
+  margin: 0 0.5rem 1rem 0;
+}
+
+nb-card.inline-form-card nb-card-body {
+  padding-bottom: 0;
+  overflow: visible;
+}
+
+  nb-card {
+    &.accent {
+      border-top-width: 2px !important;
+    }
+  }
+
+  nb-accordion-item{
+    background-color: transparent !important;
+  }

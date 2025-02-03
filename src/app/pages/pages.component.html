@@ -1,0 +1,6 @@
+<ngx-one-column-layout [ngSwitch]="owner">
+  <nb-menu   [items]="subAccountService.menuIteams"
+   [ngClass]="{'admn-class':isSuperAdmin()}"></nb-menu>
+   
+  <router-outlet></router-outlet>
+ </ngx-one-column-layout>

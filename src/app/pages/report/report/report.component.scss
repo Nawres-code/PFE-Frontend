@@ -1,0 +1,51 @@
+.form-inline [fullWidth] {
+  flex: 1;
+}
+
+.form-inline > * {
+  margin: 0 0.5rem 1rem 0;
+}
+
+nb-card.inline-form-card nb-card-body {
+  padding-bottom: 0;
+  overflow: hidden;
+}
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+.month-picker {
+  & .mat-calendar-period-button {
+  pointer-events: none;
+  }
+  & .mat-calendar-arrow {
+  display: none;
+  }
+}
+
+.month-picker-input{
+  border-top: none;
+  border-bottom-width: 2px !important;
+  border-right: none;
+  border-left: none;
+}
+
+
+// @import '../../../@theme/styles/themes';
+// @import '~@nebular/theme/styles/global/breakpoints';
+// @import '~bootstrap/scss/mixins/breakpoints';
+
+// @include nb-install-component() {
+
+//   nb-card-body {
+//     overflow: visible;
+//     padding-top: 0;
+//     > * {
+//       margin-top: 1rem;
+//     }
+//   }
+
+//   @media (max-width: 767px){
+//     nb-card {
+//       width: 80vw !important;
+//     }
+//   }
+
+// }

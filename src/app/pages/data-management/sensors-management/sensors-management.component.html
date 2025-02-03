@@ -1,0 +1,27 @@
+<nb-card accent="primary">
+  <nb-card-header *ngIf="owner != 'CDC'">
+    <nb-icon status="primary" icon="settings-outline"></nb-icon>
+    {{'SENSOR.sensorTitle' | translate}}
+  </nb-card-header>
+
+  <nb-card-header *ngIf="owner == 'CDC'">
+    <nb-icon status="primary" icon="settings-outline"></nb-icon>
+    Gestion des mesures
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng-container *ngIf="owner != 'CDC'">
+      <ng2-smart-table *ngIf="settings!= null" [settings]="settings" [source]="source"
+        (editConfirm)=onEditConfirm($event)>
+      </ng2-smart-table>
+    </ng-container>
+
+    <ng-container *ngIf="owner == 'CDC'">
+      <ng2-smart-table *ngIf="settings!= null" [settings]="settings" [source]="source"
+        (editConfirm)=onEditConfirmCdc($event) (createConfirm)="onCreateConfirmCdc($event)"
+        (deleteConfirm)="onDeleteConfirm($event)">
+      </ng2-smart-table>
+    </ng-container>
+
+  </nb-card-body>
+</nb-card>

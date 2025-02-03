@@ -1,0 +1,67 @@
+stages:
+  - build
+  
+  - deploy
+  
+  - code_scan
+  
+
+
+build:
+  stage: build
+  tags:
+    - trylocal
+  
+  image: node:lts-alpine3.19
+  cache:
+    key: "$CI_COMMIT_REF_NAME" # Cache key based on branch name
+    paths:
+      - node_modules/ # Cache npm dependencies
+  script:
+    - apk update && apk add --no-cache curl
+    - echo "Building your Angular application..."
+    - npm install -g @angular/cli@14.0.4 
+    - npm install --force
+    - ng build --configuration=production
+    - tar czf dist.tar.gz dist/
+    # Upload the artifact file to jfrog 
+    - curl -v -u "admin:Rafik.123" -T "dist.tar.gz" "http://172.17.0.1:8081/repository/front-repo/dist.tar.gz"
+
+deploy:
+  stage: deploy
+  tags:
+    - trylocal_linux
+
+  script:
+    
+    - docker build --no-cache -t localhost:8082/repository/docker-local/front:latest .
+    # push docker image to nexus
+    - docker login -u admin -p Rafik.123 localhost:8082
+    - docker push localhost:8082/repository/docker-local/front:latest
+    # pull it 
+    - docker pull localhost:8082/repository/docker-local/front:latest
+    #RUN IT 
+    - docker run -p 80:80 -d localhost:8082/repository/docker-local/front:latest
+    
+
+
+sonarqube-check:
+  stage: code_scan
+  tags:
+    - trylocal
+  image: 
+    name: sonarsource/sonar-scanner-cli:5
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: 
+    #- cp ${CI_PROJECT_DIR}/sonarFRONT-project.properties ${CI_PROJECT_DIR}/sonar-project.properties
+
+    - sonar-scanner #-Dsonar.config.location=${CI_PROJECT_DIR}/sonarFRONT-project.properties
+  allow_failure: true
+  

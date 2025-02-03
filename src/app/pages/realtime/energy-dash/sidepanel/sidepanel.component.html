@@ -1,0 +1,45 @@
+<nb-card-front >
+    <nb-card accent="primary">
+        <nb-card-header>
+            <nb-icon status="primary" icon="layers-outline"></nb-icon><span class="ml-2">STATISTIQUES</span>
+        </nb-card-header>
+        <nb-card-body class="px-3 pb-0">
+            <div class="row">
+                <nb-select fullWidth filled status="danger" size="small" placeholder="select by" [selected]="selectBy"
+                    (selectedChange)="update($event)" class="col input-group mt-2">
+                    <nb-option *ngFor="let c of choix" [value]="c[1]">
+                        {{ c[0] }}
+                    </nb-option>
+                </nb-select>
+                <nb-select fullWidth filled status="danger" size="small" [selected]="type"
+                    (selectedChange)="changePeriod($event)" class="col input-group mt-2">
+                    <nb-option *ngFor="let type of types" [value]=" type[1] ">
+                        {{ type[0] }}
+                    </nb-option>
+                </nb-select>
+            </div>
+            </nb-card-body>
+            <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large" class="pt-0">
+            <nb-list *ngIf="selectBy == 'zone'">
+                <nb-list-item class="item px-0 justify-content-between" *ngFor="let stat of  filterByZoneIds()">
+                  <span class="caption">{{dataManagementService.getzoneById(stat.id)?.name | uppercase}}</span>
+                  <span class="text-center">{{stat.val1 | number:'2.1-2'}}</span>
+                  <div><span class="delta float-right" [class.up]="getVariationPct(stat)>=0" [class.down]="getVariationPct(stat)<0">
+                    <nb-icon [icon]="getVariationPct(stat)>=0 ? 'arrow-up' : 'arrow-down'" pack="eva"></nb-icon>
+                    {{ getVariationPct(stat)| number:'2.1-2' }}%
+                  </span></div>
+                </nb-list-item>
+               </nb-list>
+                <nb-list  *ngIf="selectBy != 'zone'">
+                    <nb-list-item class="item px-0 justify-content-between" *ngFor="let stat of filterByInstallationIds()">
+                        <span class="caption">{{dataManagementService.getInstallationById(stat.id)?.name | uppercase}}</span>
+                        <span class="text-center">{{stat.val1 | number:'2.1-2'}}</span>
+                        <div><span class="delta float-right" [class.up]="getVariationPct(stat)>=0" [class.down]="getVariationPct(stat)<0">
+                          <nb-icon [icon]="getVariationPct(stat)>=0 ? 'arrow-up' : 'arrow-down'" pack="eva"></nb-icon>
+                          {{ getVariationPct(stat)| number:'2.1-2' }}%
+                        </span></div>
+                      </nb-list-item>
+              </nb-list>
+        </nb-card-body>
+    </nb-card>
+</nb-card-front>

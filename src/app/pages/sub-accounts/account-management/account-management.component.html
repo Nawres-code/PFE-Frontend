@@ -1,0 +1,31 @@
+<div class="row" style="font-family: 'Inconsolata', monospace;">
+  <div class="col-md-7">
+    <app-account-form [mode]="'ADD'" [isCollabsed]="true" [installations]="installations" [authorities]="authorities">
+    </app-account-form>
+  </div>
+
+  <div class="col-md-5 style-1" *ngIf="accounts && accounts?.length > 0">
+    <app-account-form *ngFor="let account of accounts" [user]="account" [mode]="'SHOW'"
+     [isCollabsed]="false" [installations]="installations" [authorities]="authorities">
+    </app-account-form>
+  </div>
+
+  <div class="col-md-5" *ngIf="(!accounts || accounts?.length == 0) && !loading">
+    <div class="alert alert-warning alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <h4><fa-icon [icon]="faIcon.faInfo" class="icon"></fa-icon>   {{'ACCOUNT.info' | translate}}</h4>
+       
+      {{'ACCOUNT.souscomptepourinstant' | translate }}
+    </div>
+  </div>
+
+  <div class="col-md-5" *ngIf="loading">
+    <div class="alert alert-success alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <h4><fa-icon [icon]="faIcon.faInfo" class="icon"></fa-icon> {{'ACCOUNT.info'| translate  }}</h4>
+      {{'ACCOUNT.chargement' | translate}}
+    </div>
+  </div>
+
+</div>
+

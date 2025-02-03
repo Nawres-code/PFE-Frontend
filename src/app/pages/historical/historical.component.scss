@@ -1,0 +1,11 @@
+
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+@include media-breakpoint-down(sm) {
+  ::ng-deep nb-datepicker-container nb-calendar-with-time nb-card.calendar-with-time {
+   height: 50vh !important;
+    & nb-card-body .timepicker-section {
+      display : none ! important;
+    }
+  }
+}

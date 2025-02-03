@@ -1,0 +1,14 @@
+   <div> 
+   <ngx-slide-out [showInputs]="true" *ngIf="owner!='INPUT' && renderInputBar">
+        <ngx-inputs-bar [inputs]="inputs" [installationId]="+idDiv" 
+        (onInputsChanged)="toogleSeries($event)" ></ngx-inputs-bar>
+    </ngx-slide-out>
+    <div [id]="'container'+idDivPrefix+idDiv" #refGpsGraph
+      [ngStyle]="{'height': owner == 'INPUT' ? '100px':'200px'}"
+        style="display: block;min-height: 18vh;  width: 100%"> 
+        <highcharts-chart *ngIf="chartOptions" [Highcharts]="Highcharts" [options]="chartOptions"  
+        style="min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; display: block;"
+        [callbackFunction]="callbackFunction"
+        ></highcharts-chart> 
+      </div> 
+</div>

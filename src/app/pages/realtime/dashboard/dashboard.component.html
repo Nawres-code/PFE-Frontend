@@ -1,0 +1,9 @@
+<ng-container [ngSwitch]="owner">
+    <ng-container *ngSwitchDefault>
+        <ngx-zone></ngx-zone> 
+        <ngx-zone-list></ngx-zone-list>
+    </ng-container>   
+    <div class="row" *ngSwitchCase="'AZIZA'">
+        <ngx-zone-list></ngx-zone-list>
+    </div>
+</ng-container>

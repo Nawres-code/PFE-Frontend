@@ -1,0 +1,44 @@
+
+
+nb-card-body {
+  overflow: visible;
+  padding-top: 0;
+
+  > * {
+    margin-top: 1rem;
+  }
+}
+
+.installation{
+  margin: 5px; 
+  background-color: #f84d69;
+  color: white;
+}
+
+.authority{
+  margin: 5px;
+  background-color:#26c555;
+  color:white
+}
+
+.tools .header{
+  padding-left: 0px;
+}
+
+.label{
+  font-weight: 600;
+}
+
+
+/* CSS to change 'Warn' color */
+::ng-deep span .mat-slide-toggle.mat-warn.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #3deb62;
+}
+
+::ng-deep span .mat-slide-toggle.mat-warn.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: #b8f893;
+}
+
+
+
+

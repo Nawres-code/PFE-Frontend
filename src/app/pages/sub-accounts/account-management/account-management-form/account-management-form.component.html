@@ -1,0 +1,142 @@
+<div class="box"
+  [ngClass]="{'box-success': user.enabled && mode === 'SHOW','box-danger': !user.enabled && mode === 'SHOW','box-info': mode === 'ADD' || mode === 'UPDATE'}">
+
+  <nb-card>
+    <nb-card-header>
+      <div class="user-block row">
+        <div class="col-7 header" style="color: #ff4c6a;">
+
+          <span *ngIf="mode === 'ADD'" class="username ml-2">
+            <fa-icon [icon]="faIcon.faUserPlus" style="font-size: 1.5rem;"></fa-icon></span>
+          <span *ngIf="mode === 'SHOW'" class="username ml-2">
+            <fa-icon [icon]="faIcon.faUser" style="font-size: 1.5rem;"></fa-icon></span>
+          <span *ngIf="mode === 'UPDATE'" class="username ml-2">
+            <fa-icon [icon]="faIcon.faUserCog" style="font-size: 1.5rem;"></fa-icon></span>
+          <span class="username ml-2 my-auto">
+            <a *ngIf="mode === 'SHOW'" (click)="toggle()">{{user?.displayName | uppercase}}</a>
+            <a *ngIf="mode === 'ADD'">{{'ACCOUNT.ajoutersouscompte' | translate }} </a>
+            <a *ngIf="mode === 'UPDATE'">{{'ACCOUNT.modifiersouscompte' | translate }} {{user?.username}}</a>
+          </span>
+
+        </div>
+        <div class="col-5 tools" style="color: black;">
+          <span *ngIf="mode === 'SHOW'" style="float: right;">
+            <span data-toggle="tooltip" title="" class="badge" title="{{'ACCOUNT.newsmsg' | translate}}"
+              [ngClass]="{'bg-green': user.enabled,'bg-red': !user.enabled}"></span>
+
+              <fa-icon [icon]="faIcon.faCogs" data-toggle="tooltip" title="{{'ACCOUNT.modifiersouscompte' | translate  }}" (click)="updateSubAccount()"
+               style="cursor:pointer;"></fa-icon>
+
+               <fa-icon [icon]="faIcon.faMinus" data-toggle="tooltip" (click)="toggle()" title="{{'ACCOUNT.minimuse'| translate  }}"
+              style="margin-left: 20px; cursor:pointer;" class="fa fa-minus"></fa-icon>
+
+              <fa-icon [icon]="faIcon.faTimes" data-toggle="tooltip" (click)="deleteSubAccount()" title="{{'ACCOUNT.supprimersouscompte'| translate  }}"
+              style="margin-left: 20px; cursor:pointer;" ></fa-icon>
+
+          </span>
+        </div>
+      </div>
+      <span class="box-tools mt-2" *ngIf="mode === 'SHOW'">
+        <span class="description ml-1 my-auto" *ngIf="mode === 'SHOW'" style="font-size: smaller; font-weight: 600; color: #4b4b4b;">
+          {{user?.creationDate | date: short }}</span>
+
+        <span style="float: right;">
+          <mat-slide-toggle color="warn" [checked]="user.enabled" (change)='enableOrdisableAccount(user)'
+            *ngIf="mode === 'SHOW'">
+          </mat-slide-toggle>
+        </span>
+      </span>
+    </nb-card-header>
+    <nb-card-body class="pb-0" *ngIf="isCollabsed && mode === 'SHOW'">
+      <form>
+        <div class="form-group">
+          <label class="label">{{'ACCOUNT.login'| translate}}</label>
+          <div class="col-sm-10">
+            <label class="label">{{user.username | truncate:[20] | lowercase}}</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="label">{{'ACCOUNT.pwd' | translate}}</label>
+
+          <div class="col-sm-10">
+            <label class="label" (click)="showPW = false" *ngIf="showPW">{{user.password | lowercase}}</label>
+            <label class="label" (click)="showPW = true" *ngIf="!showPW">************</label>
+          </div>
+        </div>
+
+        <!-- authority Section -->
+        <div class="form-group">
+          <span class="badge authority p-1" *ngFor="let authority of user.authorities">{{authority.label}}
+          </span>
+        </div>
+
+        <!-- installation Section -->
+        <div class="form-group">
+          <span class="badge installation p-1"
+            *ngFor="let installationId of user.installationIds">{{getInstallationName(installationId)}}
+          </span>
+        </div>
+      </form>
+    </nb-card-body>
+  </nb-card>
+
+  <div class="box-body" *ngIf="isCollabsed">
+    <nb-card *ngIf="mode === 'ADD' || mode === 'UPDATE'">
+      <nb-card-body>
+        <form #accountForm="ngForm">
+          <div class="form-group">
+            <label for="titre" class="label">{{'ACCOUNT.titre' | translate }}</label>
+            <input type="text" nbInput fullWidth id="titre" placeholder="{{'ACCOUNT.titre' | translate }} "
+              [(ngModel)]="user.displayName" name="displayName" #displayName="ngModel" required=true>
+          </div>
+          <div class="form-group">
+            <label for="password" class="label">{{'ACCOUNT.pwd' | translate }}</label>
+            <input type="password" nbInput fullWidth id="password" placeholder="Password" [(ngModel)]="user.password"
+              name="password" #password="ngModel" required=true>
+          </div>
+          <div class="form-group">
+            <label for="password" class="label">{{'ACCOUNT.username' | translate }}</label>
+            <input type="text" nbInput fullWidth id="password" placeholder="{{'ACCOUNT.username' | translate }}"
+              [(ngModel)]="user.username" name="username" #email="ngModel" required=true>
+          </div>
+
+          <div class="form-group">
+
+            <label class="label">
+              {{'ACCOUNT.autorites' | translate }}
+            </label>
+            <div>
+              <ng-select style="font-family: roboto" class="custom" name="autho" [multiple]="true"
+                [items]="authoritiesItems" bindLabel="text" appendTo="body" [(ngModel)]="authoritiesSelected"
+                placeholder="Select your choice...">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <label class="label">
+              {{'ACCOUNT.installation' | translate }}
+            </label>
+            <div>
+              <ng-select style="font-family: roboto" name="insta" [multiple]="true" [items]="installationsItems"
+                bindLabel="text" [(ngModel)]="installationsSelected" placeholder="Select your choice...">
+              </ng-select>
+            </div>
+          </div>
+
+          
+          <button type="submit" nbButton status="danger"  style="margin-right: 5px;" (click)="addSubAccount()" [disabled]="!accountForm.form.valid"
+            *ngIf="mode === 'ADD'">
+            <fa-icon [icon]="faIcon.faSave" class="mr-2" style="font-size:larger;"></fa-icon>{{ 'ACCOUNT.valider' | translate }}</button>
+
+          <button type="submit" nbButton status="danger"  style="margin-right: 5px;" (click)="editSubAccount()" [disabled]="!accountForm.form.valid"
+            *ngIf="mode === 'UPDATE'"> <fa-icon [icon]="faIcon.faSave"class="mr-2" style="font-size:larger;"></fa-icon>{{ "ACCOUNT.modifier" | translate  }}</button>
+
+            <button type="submit" nbButton status="danger"
+            (click)="init()"><fa-icon [icon]="faIcon.faSyncAlt" class=" mr-2" style="font-size:larger;"></fa-icon>{{ 'ACCOUNT.annuler' | translate }}</button>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

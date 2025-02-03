@@ -1,0 +1,17 @@
+<nb-card accent="primary">
+  <nb-card-header>
+    <nb-icon status="primary" icon="people-outline"></nb-icon>
+    <span class="ml-2">{{'SUB_ACC.title' | translate}}</span>
+    <nb-select filled class="float-right" status="primary" placeholder="{{'SUB_ACC.subAcc' | translate}}"
+      [(selected)]="currentSub" (selectedChange)="onSubAccountChnaged($event)">
+      <nb-option *ngFor="let account of subAccountService.subAccounts" [value]="account">
+        {{account.username | uppercase}} </nb-option>
+    </nb-select>
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table *ngIf="settings!= null" [settings]="settings" [source]="source"
+      (editConfirm)=onEditConfirm($event)>
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>

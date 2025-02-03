@@ -1,0 +1,30 @@
+@use '../../styles/themes' as *;
+
+@include nb-install-component() {
+  .menu-sidebar ::ng-deep .scrollable {
+    padding-top: nb-theme(layout-padding-top);
+  }
+  nb-layout-footer ::ng-deep nav.fixed  {
+    padding:0.5rem !important;
+  }
+  ::ng-deep nb-layout-column{
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    padding-top: 1rem !important;
+  }  
+  
+  nb-sidebar ::ng-deep .main-container-fixed {
+    height: calc(#{nb-theme(sidebar-height)} * 0.505) !important;
+    top: calc(var(--sidebar-height) * 0.25) !important;
+    border-radius: 0 50px 80px 0;
+    background-color: white;
+    border-top-color: var(--card-header-primary-background-color);
+    border-bottom-color: var(--card-header-primary-background-color);
+    & .scrollable {
+      //padding-top: 3.75rem !important;
+      margin-top: 3rem !important;
+      margin-bottom: 5rem !important;
+    }
+  }
+}
+

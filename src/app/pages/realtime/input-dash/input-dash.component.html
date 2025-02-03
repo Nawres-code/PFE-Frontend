@@ -1,0 +1,98 @@
+<ng-container [ngSwitch]="owner" class="row">
+    <div class="row" *ngSwitchCase="'INPUT'">
+        <ng-container *ngFor="let installation of dataManagementService.selectedZone?.installations ">
+
+            <ng-container *ngTemplateOutlet="doorInput; context: { doorInput: getDoorInput(installation)}">
+            </ng-container>
+            <ng-container *ngTemplateOutlet="inCatList; context: { inCatList: getInputCategoriesName(installation)}">
+            </ng-container>
+
+            <ng-template #doorInput let-doorInput="doorInput">
+                <div class="col-xxxl-12 col-xl-12" *ngIf="doorInput">
+                    <nb-card class="solar-card" accent="primary">
+                        <nb-card-body class="px-3 py-1">
+                            <div class="row px-3">
+                                <div class="col-md-3 my-auto div-container">
+                                    <nb-card class="mx-1 mt-3 my-md-auto input-card" [accent]="getAccent(doorInput.id, installation)">
+                                        <nb-card-header class="p-2 text-center">
+                                                <img src="assets/images/ImpoliteTepidCrab-max-1mb.gif" class="d-none"
+                                                    style="width:12%!important;" class="">
+                                                <span class="">{{doorInput.name}}
+                                                    <span>{{getRtInput(doorInput.id, installation.id)?.lastValue==0 && doorInput.inversed ? 'est fermée': 'est ouverte'}}</span>
+                                                </span>
+                                        </nb-card-header>
+                                        <nb-card-body class="text-center p-0 pb-3">
+                                            <div>
+                                                <fa-icon [icon]="faIcon.faDoorOpen" *ngIf="getRtInput(doorInput.id, installation.id)?.lastValue==1"
+                                                    class="input-icon"  style="font-size: 2.5rem !important;"></fa-icon>
+                                                <fa-icon [icon]="faIcon.faDoorClosed" *ngIf="getRtInput(doorInput.id, installation.id)?.lastValue==0"
+                                                    class="input-icon"  style="font-size: 2.5rem !important;"></fa-icon>
+                                            </div>
+                                        </nb-card-body>
+                                        <nb-card-footer class="p-1 text-center">
+                                            <p class="text-dark mb-0">
+                                                <fa-icon [icon]="faIcon.faClock" class="mr-2"></fa-icon>
+                                                {{getDateDiff(getRtInput(doorInput.id,
+                                                installation.id)?getRtInput(doorInput.id, installation.id)?.lastTime :
+                                                null)}}
+                                            </p>
+                                        </nb-card-footer>
+                                    </nb-card>
+                                    <div class="middle px-3">
+                                        <div class="text">
+                                             <i class="nb-bar-chart shortcut" title="Historique" style="font-size: xx-large;" (click)="selectedItemDetails(installation.id, [doorInput.id] )"></i></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 my-auto">
+                                     <gps-graph [idDiv]="installation.id" [sondes]="installation.sondes"
+                                        [vars]="vars" [startDate]="startDate" [inst-name]="''"
+                                        [endDate]="endDate" [inputs]="[doorInput]">
+                                    </gps-graph> 
+                                </div>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+            </ng-template>
+
+            <ng-template #inCatList let-inCatList="inCatList">
+                <div class="col-xxxl-4 col-xl-4" *ngFor="let catName of inCatList">
+                    <nb-card class="solar-card " accent="primary" >
+                        <nb-card-header class="group-header px-3 py-2">
+                            {{ catName| uppercase}}
+                        </nb-card-header>
+                        <nb-card-body class="pb-0 p-3">
+                            <div class="row px-3">
+                                <div class="col-4 p-0 mb-2 div-container"
+                                    *ngFor="let input of inputList(catName, installation)">
+                                    <nb-card class="mx-2 mb-0 h-100 input-card" 
+                                    [accent]="getAccent(input.id, installation)"
+                                    style="transition: .5s ease; backface-visibility: hidden;">
+                                        <nb-card-header class="p-2 text-center">
+                                            <img src="assets/images/ImpoliteTepidCrab-max-1mb.gif" class="d-none">
+                                            <span class="caption">{{input.name}}</span>  
+                                        </nb-card-header>
+                                        <nb-card-body class="text-center p-0 pb-2 pt-3">
+                                            <fa-icon [icon]="faIcon.faStop" class="input-icon" ></fa-icon>
+                                        </nb-card-body>
+                                        <nb-card-footer class="p-1 text-center">
+                                            <p class="text-dark mb-0">  
+                                                <fa-icon [icon]="faIcon.faClock" class="mr-2"></fa-icon>
+                                                {{getDateDiff(getRtInput(input.id, installation.id)?getRtInput(input.id,
+                                                installation.id)?.lastTime : null)}}
+                                            </p>
+                                        </nb-card-footer>
+                                    </nb-card>
+                                    <div class="middle px-3">
+                                        <div class="text"> <i class="nb-bar-chart shortcut" title="Historique" (click)="selectedItemDetails(installation.id, [input.id] )"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </nb-card-body>
+                        </nb-card>
+                    </div>
+              </ng-template>
+                        </ng-container>
+    </div>
+
+</ng-container>

@@ -1,0 +1,26 @@
+
+<nb-card>
+  <nb-card-body>
+
+    <ng-container
+      *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.installationsRtDto[dataManagementService.selectedInstallation.id]">
+
+      <table id="customers">
+        <thead>
+          <th>Non</th>
+          <th>Consommatoion(kWh)</th>
+          <th>Cout(TND)</th>
+        </thead>
+        <tbody *ngFor="let group of dataManagementService.selectedInstallation.groupses">
+          <td>{{group.name}}</td>
+          <td>
+            {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].installationsRtDto[dataManagementService.selectedInstallation.id].groupsRtDto[group.id]?.eAct | round }}
+          </td>
+          <td>
+            {{(dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone].installationsRtDto[dataManagementService.selectedInstallation.id].groupsRtDto[group.id]?.eAct) *0.420 | round}}
+          </td>
+        </tbody>
+      </table>
+    </ng-container>
+  </nb-card-body>
+</nb-card>

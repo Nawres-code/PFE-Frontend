@@ -1,0 +1,393 @@
+<ng-container>
+    <div>
+        <div  *ngIf="render.energySummary" class="row">
+            <div class="col-lg-12" *ngFor="let category of orderByName(dataManagementService.tenantData?.categories)">
+                <div *ngIf="category.name == 'General'">
+                    <nb-card accent="primary" class="solar-card">
+                        <nb-card-header>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    {{'General' | uppercase}}
+                                </div>
+                                <div class="title col-md-4">
+                                    <div class="float-right" [ngSwitch]="owner">
+                                        <a (click)="selectDashboard()" class="pointer" *ngSwitchCase="'AZIZA'">{{'Aziza'
+                                            | uppercase}}</a>
+                                        <a class="pointer" *ngSwitchDefault>Zone</a>
+                                        <i class="nb-arrow-thin-right"></i>
+                                        {{dataManagementService.selectedZone?.name | uppercase}}
+                                    </div>
+                                </div>
+                            </div>
+                        </nb-card-header>
+                        <nb-card-body class="row justify-content-left align-items-start pb-0"
+                            style="overflow-x: hidden!important;">
+                            <div class="col-12 col-md-3">
+                                <div class="caption col-12 mb-2 pl-0">
+                                    <span class="">{{'DASH.energyLabel' | translate}}</span>
+                                    <p class="caption" *ngIf="owner =='ANME'"> {{ 'DASH.dateEnergyLabel' | translate }}  {{ today | date:'mediumDate':'UTC+1'}}</p>
+                                </div>
+                                <div class="shortcut-graph" *ngIf="!render.energySummaryCards">
+                                    <div
+                                        class="d-inline-flex flex-column-reverse border-left border-bottom pl-2 pb-2">
+                                        <div class="mt-2">
+                                            <fa-icon [icon]="faIcon.faChartBar" class="pointer" title="History"
+                                                style="font-size: 150%; font-weight: 100;"
+                                                (click)="selectedCompartor(category.id)"></fa-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center"  *ngIf="render.energySummaryCards">
+                                <div class="total-summary pb-3">
+                                    <nb-card accent="info" class="mb-2 h-100">
+                                        <nb-card-header class="py-1 d-flex flex-row justify-content-between">
+                                            <span>ENERGY</span>
+                                    <div class="shortcut-graph" [ngSwitch]="owner">
+                                        <div *ngSwitchDefault>
+                                                <fa-icon [icon]="faIcon.faChartBar" class="pointer" title="History"
+                                                    style="font-weight: 100;"
+                                                    (click)="selectedCompartor(category.id)"></fa-icon>
+                                        </div>
+    
+                                        <div *ngSwitchCase="'AZIZA'"
+                                            class="d-inline-flex flex-column-reverse border-left border-bottom pl-2 pb-2">
+                                            <div class="mt-2">
+                                                <fa-icon [icon]="faIcon.faNotEqual" class="pointer" title="Compartor"
+                                                    style="font-size: 100%; font-weight: 600; color:#000000a6;"
+                                                    (click)="selectedCompartor(category.id)"></fa-icon>
+                                            </div>
+                                            <div class="mt-2">
+                                                <fa-icon [icon]="faIcon.faHistory"class="pointer" title="History"
+                                                    style="font-size: 100%; font-weight: 600; color: #000000a6;"
+                                                    (click)="selectedEnergy(category.id, category.name)"></fa-icon>
+                                            </div>
+                                        </div>
+                                        <div *ngSwitchCase="'TRICITY'"
+                                            class="d-inline-flex flex-column-reverse border-left border-bottom pl-2 pb-2">
+                                            <div class="mt-2">
+                                                <fa-icon [icon]="faIcon.faChartBar" class=" pointer" title="History"
+                                                    style="font-size: 100%; font-weight: 600; color: #000000a6;"
+                                                    (click)="selectedEnergy(category.id, category.name)"></fa-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        </nb-card-header>
+                                        <nb-card-body class="py-1 text-center">
+                                    <div  class="h4">
+                                        {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.eAct
+                                        | number:'2.1-2'}}
+                                        <span  class="h6">
+                                            <span class="h6">{{getEnergyUnit()}}</span>
+                                        </span>
+                                    </div>
+                                    </nb-card-body>
+                                    </nb-card>
+                                </div>
+                                <div class="total-summary pb-3" *ngIf="render.energySummaryGaz">
+                                    <nb-card accent="success" class="mb-2 h-100">
+                                        <nb-card-header class="py-1">{{ 'DASH.GAZ' | translate}}</nb-card-header>
+                                        <nb-card-body class="py-1 text-center">
+                                    <div *ngIf="dataManagementService.tenantData.categories.length > 1 || owner =='TRICITY'" class="h4">
+                                        {{ gazDaily
+                                        | number:'2.1-2'}}
+                                        <span *ngIf="dataManagementService.tenantData.categories.length > 1 || owner =='TRICITY'" class="h6">
+                                            <span class="h6">{{getGazUnit()}}</span>
+                                        </span>
+                                    </div>
+                                        </nb-card-body>
+                                      </nb-card>
+                                </div>
+                                <div class="total-summary pb-3" *ngIf="render.energySummaryCalorific">
+                                    <nb-card accent="danger" class="mb-2 h-100">
+                                        <nb-card-header class="py-1">{{ 'DASH.CALORIFIQUE' | translate}}</nb-card-header>
+                                        <nb-card-body class="py-1 text-center">
+                                    <div *ngIf="dataManagementService.tenantData.categories.length > 1 || owner =='TRICITY'" class="h4">
+                                        -- {{ calorificDaily
+                                        | number:'2.1-2'}}
+                                        <span *ngIf="dataManagementService.tenantData.categories.length > 1 || owner =='TRICITY'" class="h6">
+                                            <span class="h6">{{getGazUnit()}}</span>
+                                        </span>
+                                    </div>
+                                        </nb-card-body>
+                                      </nb-card>
+                                </div>
+                                <div class="total-summary pb-3" *ngIf="render.energySummaryWater">
+                                    <nb-card accent="danger" class="mb-2 h-100">
+                                        <nb-card-header class="py-1">{{ 'DASH.EAU' | translate}}</nb-card-header>
+                                        <nb-card-body class="py-1 text-center">
+                                    <div *ngIf="dataManagementService.tenantData.categories.length > 1 || owner =='TRICITY'" class="h4">
+                                       --  {{ waterDaily
+                                        | number:'2.1-2'}}
+                                        <span *ngIf="dataManagementService.tenantData.categories.length > 1 || owner =='TRICITY'" class="h6">
+                                            <span class="h6">{{getGazUnit()}}</span>
+                                        </span>
+                                    </div>
+                                        </nb-card-body>
+                                      </nb-card>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-9 mt-md-4 mb-2 align-self-center">
+                                <ngx-column-chart *ngIf="render.energySummaryColumnChart" class="align-self-center" [divIdName]='main-inst'
+                                    [zone] = "dataManagementService.selectedZone">
+                                </ngx-column-chart>
+                                <ngx-stacked-bar-energy *ngIf="render.energySummaryStackChart" class="align-self-center" [divIdName]='main-inst'
+                                [zone] = "dataManagementService.selectedZone">
+                                 </ngx-stacked-bar-energy>
+
+                            <ngx-stacked-bar-impulse *ngIf="render.energySummaryGaz"  class="align-self-center" [divIdName]='main-inst'
+                            [zone] = "dataManagementService.selectedZone" [ioType]="'GAZ'"></ngx-stacked-bar-impulse>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+            </div>
+        </div>
+
+        <div  *ngIf="render.energyCategories" class="row justify-content-stretch" >
+            <ng-container
+                *ngIf="dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]">
+                <ng-container *ngFor="let category of orderByName(dataManagementService.tenantData?.categories)">
+                    <div class="col-md-3 mb-3 catCard"
+                        *ngIf="category.name != 'General' && category.name != 'Autres' && dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.eActPerCat[category.id]">
+                        <nb-card size="tiny" class="solar-card h-100"
+                            [ngStyle]="{ 'border-top-color': category.color, 'border-top-width': '3px', 'color': category.color}">
+                            <nb-card-header class="category-header">
+                                <div class="d-flex flex-row justify-content-between">
+                                    <div size="tiny">
+                                        {{category.name}}
+                                    </div>
+                                    <ng-container [ngSwitch]="owner">
+                                        <div class="d-flex flex-row text-medium" *ngSwitchDefault>
+                                            <div class="mr-2">
+                                                <fa-icon [icon]="faIcon.faChartBar" class=" pointer" title="History"
+                                                    (click)="selectedCompartor(category.id)"></fa-icon>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-row text-medium" *ngSwitchCase="'AZIZA'">
+                                            <div class="mr-2 ">
+                                                <fa-icon [icon]="faIcon.faHistory" class="pointer" title="History"
+                                                    (click)="selectedEnergy(category.id, category.name)"></fa-icon>
+                                            </div>
+                                            <div class="mr-2">
+                                                <fa-icon [icon]="faIcon.faNotEqual"class=" pointer" title="Compartor"
+                                                    (click)="selectedCompartor(category.id)"></fa-icon>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </nb-card-header>
+                            <nb-card-body class="d-flex  flex-column px-3 py-0 ">
+                                <percentage class="mx-0 align-self-center" [category]="category" [zone]="dataManagementService.selectedZone"  ></percentage>
+                                <div class="text-center">
+                                    <h6 class="mb-0">
+                                        {{+dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.eActPerCat[category.id]['eAct']
+                                        | number:'2.1-2'}}
+                                        <span class="h6">{{getEnergyUnit()}}</span>
+                                    </h6>
+                                    <span class="caption">{{ 'DASH.outOf' | translate }}
+                                        {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.eAct
+                                        | round}}
+                                        {{getEnergyUnit()}}</span>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                </ng-container>
+                <ng-container *ngFor="let category of orderByName(dataManagementService.tenantData?.categories)">
+                    <div class="col-md-3 mb-3 catCard"
+                        *ngIf="category.name == 'Autres' && dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.eActPerCat[category.id]">
+                        <nb-card size="tiny" class="solar-card h-100"
+                            [ngStyle]="{ 'border-top-color': category.color, 'border-top-width': '3px', 'color': category.color}">
+                            <nb-card-header class="category-header">
+                                <div class="d-flex flex-row justify-content-between">
+                                    <div size="tiny">
+                                        {{category.name}}
+                                    </div>
+                                </div>
+                            </nb-card-header>
+                            <nb-card-body class="d-flex flex-column px-3 py-0">
+                                <percentage class="mx-0 align-self-center " [category]="category" [zone]="dataManagementService.selectedZone"></percentage>
+                                <div class="text-center">
+                                    <h6 class="mb-0">
+                                        {{+dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone.idZone]?.eActPerCat[category.id]['eAct']
+                                        | number:'2.1-2'}}
+                                        <span class="h6">{{getEnergyUnit()}}</span>
+                                    </h6>
+                                    <span class="caption">{{ 'DASH.outOf' | translate }}
+                                        {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.eAct
+                                        | round}}
+                                        {{getEnergyUnit()}}</span>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container  class="row">
+    <div class="row" *ngIf="render.energyInstallation">
+        <ng-container *ngIf="dataManagementService.tenantData.categories.length > 1">
+            <div class="installation-card"
+                *ngFor="let installation of orderByName(getEnergyInstallation(dataManagementService.selectedZone?.installations))">
+                <nb-reveal-card>
+                    <nb-card-front>
+                        <nb-card accent="primary" class="solar-card">
+                            <nb-card-header (click)="selectInstallation(installation)" style="cursor: pointer;">
+                                {{ installation.name | uppercase }}
+                                <fa-icon [icon]="faIcon.faPlay"></fa-icon>
+                            </nb-card-header>
+                            <nb-card-body>
+                                <div class="d-flex  flex-row align-items-center details-card"
+                                    *ngIf="installation.type != 'depot'" >
+                                    <percentage [installation]="installation"
+                                        class="mx-0 align-self-center" ></percentage>
+                                    <div class="info d-md-none ">
+                                        <div class="h4 value">
+                                            {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.eAct
+                                            | number:'2.0-0'}}
+                                            <span class="h6">{{getEnergyUnit()}}</span>
+                                        </div>
+                                        <div class="caption">
+                                            <span class="">{{ 'DASH.outOf' | translate }}</span>
+                                            {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.eAct
+                                            | round}}
+                                            {{getEnergyUnit()}}
+                                        </div>
+                                    </div>
+
+                                    <ngx-bar-chart class="d-none d-md-flex ml-neg-10 w-65"
+                                    [installation]="installation" >
+                                    </ngx-bar-chart>
+                                </div>
+                                <div class=" flex-row d-md-none mt-4 ">
+                                    <div class="date  float-left">
+                                        {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone?.idZone]?.time
+                                        | date: 'dd-MM-yyyy HH:mm:ss'}}
+                                    </div>
+                                </div>
+                                <div class="d-none d-md-flex flex-row justify-content-between align-items-end">
+                                    <div class="info">
+                                        <div class="h4 value">
+                                            {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.eAct
+                                            | number:'2.0-0'}}
+                                            <span class="h6">{{getEnergyUnit()}}</span>
+                                        </div>
+                                        <div class="caption">
+                                            <span class="">{{ 'DASH.outOf' | translate }}</span>
+                                            {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.eAct
+                                            | round}}
+                                            {{getEnergyUnit()}}
+                                        </div>
+                                    </div>
+                                    <div class="date">
+                                        {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.time
+                                        | date: 'dd-MM-yyyy HH:mm:ss'}}
+                                    </div>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </nb-card-front>
+                    <nb-card-back class="d-md-none h-100">
+                        <nb-card status="primary" class="h-100">
+                            <nb-card-header (click)="selectInstallation(installation)"
+                                style="cursor: pointer; color: var(--color-primary-100) !important;">
+                                {{ installation.name | uppercase }}
+                                <fa-icon [icon]="faIcon.faPlay"  style="cursor: pointer; color: var(--color-primary-100) !important;"></fa-icon>
+                            </nb-card-header>
+                            <nb-card-body class="py-0">
+                                <ngx-bar-chart [installation]="installation" >
+                                </ngx-bar-chart>
+                            </nb-card-body>
+                        </nb-card>
+                    </nb-card-back>
+                </nb-reveal-card>
+            </div>
+        </ng-container>
+        
+        <ng-container *ngIf="dataManagementService.tenantData.categories.length == 1">
+            <div class="col-lg-6 col-md-6"
+                *ngFor="let installation of orderByName(getEnergyInstallation(dataManagementService.selectedZone?.installations))">
+                <nb-card accent="primary" class="solar-card">
+                    <nb-card-header class=" d-flex flex-row justify-content-between px-4 py-3">
+                        <span class="align-self-center">{{ installation.name | uppercase }}</span>
+                        <ng-container [ngSwitch]="owner">
+                        <i *ngSwitchDefault class="nb-bar-chart shortcut" title="Comparateur"
+                            (click)="onComparatorEnergy(installation)"></i>
+
+                            <i *ngSwitchCase="'TRICITY'" class="nb-bar-chart shortcut" title="Puissance details"
+                            (click)="selectedDetails(installation.id)"></i>
+                        </ng-container>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <div class="row align-items-center justify-content-center" *ngIf="installation.type != 'depot'"
+                            style="margin-left: -25px;">
+                            <ngx-column-compare class="col-md-4 col-6" [installationId]="installation?.id">
+                            </ngx-column-compare>
+
+                            <ng-container *ngFor=" let group of orderByName(installation.groupses)">
+                                <div *ngIf="group.type == 'General'" class=" col-8 col-md-8 mt-3">
+                                    <div class="summary-container">
+                                        <div class="mb-2" *ngFor="let phase of sortPhaseByVolatgeName(group.phases)">
+                                            <ng-container [ngSwitch]="owner">
+                                                <div *ngSwitchDefault class="mb-2">
+                                                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.groupsRtDto[group.id]?.phasesRtDto[phase.id]?.cmoy
+                                                    | number:'1.0-0' }}
+                                                    <span class="font-weight-520">A</span>
+                                                </div>
+                                                <div *ngSwitchCase="'TRICITY'" class="mb-2">
+                                                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.groupsRtDto[group.id]?.phasesRtDto[phase.id]?.cmoy
+                                                    | number:'1.1-2' }}
+                                                    <span class="font-weight-520">A</span>
+                                                </div>
+                                            </ng-container>
+                                            <div class="mb-2">
+                                                {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.groupsRtDto[group.id]?.phasesRtDto[phase.id]?.vmoy
+                                                | number:'1.0-0' }}
+                                                <span class="font-weight-520">V</span>
+                                            </div>
+                                            <div class="mb-2 caption h6">{{phase.voltage.name}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="d-flex  flex-row justify-content-between align-items-end">
+                            <div class="info">
+                            <ng-container [ngSwitch]="owner">
+                                <div *ngSwitchDefault class="value h4 mb-0">
+                                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.eAct
+                                    | number:'2.0-0'}}
+                                    <span class="h6">{{getEnergyUnit()}}</span>
+                                </div>
+                                <div *ngSwitchCase="'TRICITY'" class="value h4 mb-0">
+                                    {{dataManagementService.dataRtDto.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.eAct
+                                    | number:'2.1-2'}}
+                                    <span class="h6">{{getEnergyUnit()}}</span>
+                                    <div class="caption">{{ 'DASH.outOf' | translate }}
+                                        {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone.idZone]?.eAct
+                                        | number:'2.1-2'}}
+                                        {{getEnergyUnit()}}</div>
+                                </div>
+                            </ng-container>
+                            </div>
+                            <div class="date">
+                                {{dataManagementService.dataRtDto?.zonesRtDto[dataManagementService.selectedZone?.idZone]?.installationsRtDto[installation.id]?.time
+                                | date: 'dd-MM-yyyy HH:mm:ss'}}
+                            </div>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </ng-container>
+    </div>
+    <ng-container *ngIf="render.impulseInstallation">
+        <div class="row" 
+        *ngFor="let i of getIoInstallation(dataManagementService.selectedZone?.installations)">
+            <ngx-io-list  class="col-md-4"  *ngFor="let t of getAllIoTypes(i.ioList)" [type]="t"> </ngx-io-list>
+        </div>
+    </ng-container>
+</ng-container>

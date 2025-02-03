@@ -1,0 +1,62 @@
+<div class="row mb-3">
+    <div class="col-md-12">
+      <nb-card class="mb-0" accent="primary">
+      <nb-accordion accent="primary">
+        <nb-accordion-item class="inline-form-card"  [expanded]="formExpanded">
+         <nb-accordion-item-header> <nb-icon status="primary" icon="bar-chart"></nb-icon>
+          <span class="ml-2">{{'HISTORY.energy'| translate}}</span>
+        </nb-accordion-item-header>
+         <nb-accordion-item-body>
+          <form class="form-inline">
+            <nb-select fullWidth *ngIf="render.energyZone" id="energy-zone" placeholder="Zone" [(selected)]="selectedZone" class="col-12 col-md-2 px-0"
+              (selectedChange)="chooseZone($event)">
+              <nb-option *ngFor="let zone of orderByName(dataManagementService.tenantData.zones)" [value]="zone">{{zone.name | uppercase}}
+              </nb-option>
+            </nb-select>
+            <nb-select fullWidth *ngIf="render.energyInstallation" id="energy-installation" placeholder="Installation" [(selected)]="selectedInstallations" class="col-12 col-md-2 px-0"
+              (selectedChange)="chooseInstallation($event)" >
+              <nb-option *ngFor="let installation of  orderByName(getEnergyInstallation(selectedZone?.installations))" [value]="installation">
+                {{installation.name | uppercase}}
+              </nb-option>
+            </nb-select>
+            <nb-select fullWidth *ngIf="render.energyType" id="energy-type" placeholder="TYPE" [(selected)]="wType" class="col-12 col-md-2 px-0">
+                <nb-option *ngIf="render.energyTypeWActOption" [id]="'energy-type-wActOption'" value="energy_act"> Energy act </nb-option>
+                <nb-option *ngIf="render.energyTypeWReactOption" [id]="'energy-type-wReactOption'" value="energy_react"> Energy react </nb-option>
+                <nb-option *ngIf="render.energyTypeWFundOption" [id]="'energy-type-wFundOption'" value="energy_fund"> Energy fund </nb-option>
+                <nb-option *ngIf="render.energyTypeWAppOption" [id]="'energy-type-wAppOption'" value="energy_app"> Energy app </nb-option>
+
+              </nb-select>
+            <nb-select fullWidth *ngIf="render.energyPeriod" id="energy-period" placeholder="{{'HISTORY.period' | translate}}" [(selected)]="period" class="col-12 col-md-1 px-0">
+              <nb-option *ngIf="render.energyPeriod5min" id="energy-period-5min" value="5min"> 5 min </nb-option>
+              <nb-option *ngIf="render.energyPeriodHour" id="energy-period-hour" value="Hours"> {{'HISTORY.time.hour' | translate}} </nb-option>
+              <nb-option *ngIf="render.energyPeriodDay" id="energy-period-day" value="Day"> {{'HISTORY.time.day' | translate}}  </nb-option>
+              <nb-option *ngIf="render.energyPeriodMonth" id="energy-period-month" value="Month"> {{'HISTORY.time.month' | translate}}  </nb-option>
+            </nb-select> 
+            <nb-select fullWidth *ngIf="render.energyMeasure" id="energy-measure" multiple [(selected)]="selectedGroups" (selectedChange)="chooseGroup($event)"
+              class=" col-12 col-md-2 px-0" placeholder="{{'HISTORY.measure' | translate}}">
+              <nb-option *ngFor="let group of orderByName(selectedInstallations?.groupses)" [value]="group">
+                {{group.name}}</nb-option>
+                <nb-option *ngFor="let prov of orderByName(getSubGeneral(selectedInstallations?.provider?.groupses))" [value]="prov">
+                  {{prov.name}}
+                </nb-option> 
+            </nb-select>
+            <input nbInput   placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="from" class="col-12 col-md-2" 
+             name="startDate" [formControl]="formControl" (ngModelChange)="startDate=$event">
+            <nb-date-timepicker #from singleColumn [step]="5" style="display:none;"></nb-date-timepicker>
+            
+            <input nbInput  placeholder="{{'HISTORY.startDate' | translate}}" [nbDatepicker]="to" class="col-12 col-md-2"
+             name="endDate" [formControl]="formControl1" (ngModelChange)="endDate=$event">
+            <nb-date-timepicker #to singleColumn [step]="5" style="display:none;" ></nb-date-timepicker>
+            
+            <button type="submit" nbButton status="primary" size="small" class="col-12 col-md-1 px-0" (click)="refreshZone()">
+              <nb-icon icon="checkmark-square-2"></nb-icon>{{'HISTORY.validate' | translate}}</button>
+          </form>
+         </nb-accordion-item-body>
+        </nb-accordion-item>
+        </nb-accordion>
+      </nb-card>
+    </div>
+  </div>
+     <app-energy-graph [refreshNow]="refreshNow" [groupIds]="groupIds" [groups]="selectedGroups" [startDate]="startDate"
+     [endDate]="endDate" [period]="period" [lastUpdate]="lastUpdate" [type]="wType"   (onData)="collapseForm($event)"></app-energy-graph>
+   
